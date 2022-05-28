@@ -1,4 +1,4 @@
-package DobbleGame;
+package dobblegame;
 
 public class DobbleGame {
 

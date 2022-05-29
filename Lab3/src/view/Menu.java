@@ -7,17 +7,20 @@ import java.util.Scanner;
 import dobblegame.Player;
 import main.Main;
 import dobblegame.Dobble;
+import dobblegame.Card;
 
 public class Menu {
+
+    Dobble datosMazo = new Dobble();
+    Player datosJugadores = new Player();
+    Card datosCarta = new Card();
 
     public void ejecutarMenu() {
 
         Scanner in = new Scanner(System.in);
-        Dobble datosMazo = new Dobble();
-        Player datosJugadores = new Player();
         int cantElementos;
-        int numC;
-        int maxC;
+        int numC = 0;
+        int maxC = 0;
         int numP = 0;
         List lis_elementos = new ArrayList<>();
         List mazo = new ArrayList();
@@ -52,12 +55,11 @@ public class Menu {
                         mazo = datosMazo.generarMazo(lis_elementos, datosMazo.getNumC(), datosMazo.getMaxC());
                         System.out.println("Juego creado con exito");
                         break;
-                case 2: jugadores = datosJugadores.registrarJugador(jugadores, numP);
+                case 2: jugadores = datosJugadores.registrarJugador(jugadores, datosJugadores.getNumP());
                         puntajes.add(0);
                         break;
-                case 3:
-                    datosJuego();
-                    break;
+                case 3: datosJuego(lis_elementos, mazo, datosMazo.getMaxC(), datosMazo.getNumC(), puntajes, jugadores);
+                        break;
                 case 4:
                     jugar();
                     break;
@@ -68,35 +70,39 @@ public class Menu {
         }
     }
 
-    public void datosJuego(){
-        Scanner in = new Scanner(System.in);
-        int i = 0;
-        while (i == 0) {
-            System.out.println("### DATOS DEL JUEGO ###");
-            System.out.println("Escoja su opcion:");
-            System.out.println("1. Mazo");
-            System.out.println("2. Carta");
-            System.out.println("3. Jugador");
-            System.out.println("4. Juego");
-            System.out.println("5. Volver atras");
-            int opcion = in.nextInt();
-            switch (opcion) {
-                case 1: opcionMazo();
-                    break;
-                case 2:
-                    opcionCarta();
-                    break;
-                case 3:
-                    opcionJugador();
-                    break;
-                case 4:
-                    opcionJuego();
-                    break;
-                case 5:
-                    i = 1;
-                    break;
+    public void datosJuego(List<String> elementos, List<String> mazo, int maxC, int numC, List<Integer> puntajes, List<String> jugadores){
+
+        if(numC == 0){
+            System.out.println("Debe crear el juego para acceder a esta funcion");
+        }
+
+        else{
+            Scanner in = new Scanner(System.in);
+            int i = 0;
+            while (i == 0) {
+                System.out.println("### DATOS DEL JUEGO ###");
+                System.out.println("Escoja su opcion:");
+                System.out.println("1. Mazo");
+                System.out.println("2. Carta");
+                System.out.println("3. Jugador");
+                System.out.println("4. Juego");
+                System.out.println("5. Volver atras");
+                int opcion = in.nextInt();
+                switch (opcion) {
+                    case 1: opcionMazo(elementos, mazo, maxC, numC);
+                            break;
+                    case 2: opcionCarta(mazo, numC);
+                            break;
+                    case 3: opcionJugador(puntajes, jugadores);
+                            break;
+                    case 4: opcionJuego();
+                            break;
+                    case 5: i = 1;
+                            break;
+                }
             }
         }
+
     }
 
     public void jugar() {
@@ -128,7 +134,7 @@ public class Menu {
         }
     }
 
-    public void opcionMazo(){
+    public void opcionMazo(List<String> elementos, List<String> mazo, int maxC, int numC){
 
         Scanner in = new Scanner(System.in);
         int i = 0;
@@ -144,25 +150,51 @@ public class Menu {
             System.out.println("7. Volver atras");
             int opcion = in.nextInt();
             switch (opcion) {
-                case 1: System.out.println("Mazo mostrado");
-                    break;
-                case 2: System.out.println("Es valido/invalido");
-                    break;
-                case 3: System.out.println("Total de cartas en el mazo: X");
-                    break;
-                case 4: System.out.println("Carta obtenida: [A,B,C]");
-                    break;
-                case 5: System.out.println("Cartas faltantes: []");
-                    break;
-                case 6: System.out.println("Carta 1: A,B,C");
-                    break;
+                case 1: System.out.println("El mazo es: ");
+                        datosMazo.mostrarMazo(numC, maxC, mazo);
+                        break;
+                case 2: datosMazo.dobbleGame(mazo, numC);
+                        break;
+                case 3: datosMazo.numCards(mazo, numC);
+                        break;
+                case 4: datosCarta.nthCard(mazo, numC);
+                        break;
+                case 5: datosMazo.missingCards(elementos, mazo, numC);
+                        break;
+                case 6: datosMazo.cardsSetToString(mazo, numC);
+                        break;
                 case 7: i = 1;
-                    break;
+                        break;
             }
         }
     }
 
-    public void opcionJugador(){
+    public void opcionCarta(List<String> mazo, int numC){
+
+        Scanner in = new Scanner(System.in);
+        int i = 0;
+        while(i == 0){
+            System.out.println("### FUNCIONES SOBRE UNA CARTA ###");
+            System.out.println("Escoja su opcion:");
+            System.out.println("1. Obtener una carta del mazo");
+            System.out.println("2. Cantidad necesaria de cartas");
+            System.out.println("3. Cantidad necesaria de elementos");
+            System.out.println("4. Volver atras");
+            int opcion = in.nextInt();
+            switch (opcion) {
+                case 1: datosCarta.nthCard(mazo, numC);
+                        break;
+                case 2: datosCarta.findTotalCards(mazo, numC);
+                        break;
+                case 3: datosCarta.requiredElements(mazo, numC);
+                        break;
+                case 4: i = 1;
+                        break;
+            }
+        }
+    }
+
+    public void opcionJugador(List<Integer> puntajes, List<String> jugadores){
 
         Scanner in = new Scanner(System.in);
         System.out.println("Ingrese el nombre del jugador: ");
@@ -176,36 +208,11 @@ public class Menu {
             System.out.println("3. Volver atras");
             int opcion = in.nextInt();
             switch (opcion) {
-                case 1: System.out.println("Es turno de: Juan");
+                case 1: datosJugadores.whoseTurnIsIt(nombre, jugadores);
                         break;
-                case 2: System.out.println("El puntaje de Juan es: X");
+                case 2: datosJugadores.scorePersonal(nombre, jugadores, puntajes);
                         break;
                 case 3: i = 1;
-                        break;
-            }
-        }
-    }
-
-    public void opcionCarta(){
-
-        Scanner in = new Scanner(System.in);
-        int i = 0;
-        while(i == 0){
-            System.out.println("### FUNCIONES SOBRE UNA CARTA ###");
-            System.out.println("Escoja su opcion:");
-            System.out.println("1. Obtener una carta del mazo");
-            System.out.println("2. Cantidad necesaria de cartas");
-            System.out.println("3. Cantidad necesaria de elementos");
-            System.out.println("4. Volver atras");
-            int opcion = in.nextInt();
-            switch (opcion) {
-                case 1: System.out.println("Carta obtenida: [A,B,C]");
-                        break;
-                case 2: System.out.println("Total de cartas necesarias: X");
-                        break;
-                case 3: System.out.println("Total de elementos necesarios: X");
-                        break;
-                case 4: i = 1;
                         break;
             }
         }

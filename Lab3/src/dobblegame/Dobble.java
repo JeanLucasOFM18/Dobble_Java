@@ -36,15 +36,37 @@ public class Dobble {
 
     public List<String> generarLista(int cantElementos){
 
+        System.out.println("Recuerde no ingresar elementos repetidos");
         Scanner in = new Scanner(System.in);
         List<String> lis_elementos = new ArrayList<>();
 
         int i = 0;
+        int j = 0;
+        int aux = 0;
         while(i < cantElementos){
             System.out.println("Ingrese el elemento: ");
             String elemento = in.nextLine();
-            lis_elementos.add(elemento);
-            i = i + 1;
+            int largo = lis_elementos.size();
+            while(j < largo){
+                String elemento2 = lis_elementos.get(j);
+                if(equals(elemento, elemento2) == true){
+                    aux = 1;
+                    j = largo;
+                }
+                else{
+                    j = j + 1;
+                }
+            }
+            if(aux == 1){
+                System.out.println("El elemento es repetido");
+                j = 0;
+                aux = 0;
+            }
+            else{
+                lis_elementos.add(elemento);
+                i = i + 1;
+                j = 0;
+            }
         }
 
         return lis_elementos;
@@ -133,5 +155,172 @@ public class Dobble {
             i = i + 1;
         }
 
+    }
+
+    public void mostrarMazo(int numC, int maxC, List<String> mazo){
+
+        int i = 0;
+        int j = 0;
+        while(i < maxC){
+            List sublista = mazo.subList(j,(j+numC));
+            System.out.println(sublista);
+            i = i + 1;
+            j = j + numC;
+        }
+    }
+
+    public void dobbleGame(List<String> mazo, int numC){
+
+        int i = 0;
+        int largo = mazo.size();
+        int calculo = calculo(numC);
+        int j;
+        int comparacion = 0;
+
+        int k = 0;
+        int cantCartas = 0;
+        while(k < largo){
+            k = k + numC;
+            cantCartas = cantCartas + 1;
+        }
+
+        if(cantCartas != calculo){
+            System.out.println("El set de cartas es invalido");
+        }
+        else{
+            while((i + numC) < largo) {
+                j = i + numC;
+                List sublista = mazo.subList(i, j);
+                while (j < largo) {
+                    List sublista2 = mazo.subList(j, (j + numC));
+                    comparacion = comparaCartas(sublista, sublista2);
+                    if(comparacion != 0){
+                        i = largo + 1;
+                        j = largo + 1;
+                        comparacion = 1;
+                    }
+                    j = j + numC;
+                }
+                i = i + numC;
+            }
+
+            if(comparacion == 0){
+                System.out.println("El set de cartas es valido");
+            }
+            else{
+                System.out.println("El set de cartas es invalido");
+            }
+        }
+
+    }
+
+    public void numCards(List<String> mazo, int numC){
+
+        int largo = mazo.size();
+        int i = 0;
+        int j = 0;
+        while(i < largo){
+            i = i + numC;
+            j = j + 1;
+        }
+
+        System.out.println("La cantidad de cartas en el set es: " + j);
+    }
+
+    public void missingCards(List<String> elementos, List<String> mazo, int numC){
+
+        List<String> setCompleto = new ArrayList<>();
+        int maxC = calculo(numC);
+
+        setCompleto = generarMazo(elementos, numC, maxC);
+        int largo2 = mazo.size();
+        int largo = setCompleto.size();
+
+        int i = 0;
+        int j = 0;
+        int k;
+        int comparacion = 0;
+        while(i < largo){
+            k = i + numC;
+            List sublista = setCompleto.subList(i, k);
+            while(j < largo2){
+                List sublista2 = mazo.subList(j, j + numC);
+                comparacion = comparaCartas(sublista, sublista2);
+                if(comparacion == 1){
+                    j = largo2 + 1;
+                }
+                else{
+                    j = j + numC;
+                }
+            }
+            if(comparacion == 0){
+                System.out.println(sublista);
+                j = 0;
+                i = i + numC;
+            }
+            else{
+                j = 0;
+                i = i + numC;
+            }
+        }
+    }
+
+    public void cardsSetToString(List<String> mazo, int numC){
+
+        int i = 0;
+        int j = 1;
+        int largo = mazo.size();
+        while(i < largo){
+            List sublista = mazo.subList(i, i + numC);
+            System.out.println("Carta " + j + ": " + sublista);
+            i = i + numC;
+            j = j + 1;
+        }
+    }
+
+    public int comparaCartas(List<String> sublista, List<String> sublista2){
+
+        int i = 0;
+        int j = 0;
+        int comparacion = 0;
+        int largo = sublista.size();
+        String elemento;
+        String elemento2;
+        while(i < largo){
+            elemento = sublista.get(i);
+            while(j < largo){
+                elemento2 = sublista2.get(j);
+                if(equals(elemento, elemento2) == true){
+                    comparacion = comparacion + 1;
+                }
+                j = j + 1;
+            }
+            j = 0;
+            i = i + 1;
+        }
+
+        if(comparacion == 1){
+            return 0;
+        }
+        else{
+            return 1;
+        }
+    }
+
+    public int calculo (int numC){
+        int resultado = ((numC - 1) * (numC - 1)) + (numC - 1) + 1;
+
+        return resultado;
+    }
+
+    public boolean equals(String objeto1, String objeto2){
+
+        if(objeto1.compareTo(objeto2) == 0){
+            return true;
+        }
+
+        else{
+            return false;
+        }
     }
 }

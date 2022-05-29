@@ -3,32 +3,27 @@ package view;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
+
+import dobblegame.Player;
 import main.Main;
+import dobblegame.Dobble;
 
 public class Menu {
 
     public void ejecutarMenu() {
 
         Scanner in = new Scanner(System.in);
-
-        List<String> lis_elementos = new ArrayList<>();
-
-        lis_elementos.add("A");
-        lis_elementos.add("B");
-        lis_elementos.add("C");
-        lis_elementos.add("D");
-        lis_elementos.add("E");
-        lis_elementos.add("F");
-        lis_elementos.add("G");
-
-
+        Dobble datosMazo = new Dobble();
+        Player datosJugadores = new Player();
+        int cantElementos;
+        int numC;
+        int maxC;
+        int numP = 0;
+        List lis_elementos = new ArrayList<>();
         List mazo = new ArrayList();
         List jugadores = new ArrayList();
         List<Integer> puntajes = new ArrayList();
 
-        int numC = 0;
-        int maxC = 0;
-        int numP = 1;
 
         int i = 0;
         while (i == 0) {
@@ -41,12 +36,25 @@ public class Menu {
             System.out.println("5. Salir");
             int opcion = in.nextInt();
             switch (opcion) {
-                case 1:
-                    System.out.println("Mazo generado");
-                    break;
-                case 2:
-                    System.out.println("Registro exitoso");
-                    break;
+                case 1: System.out.println("Ingrese cantidad de elementos que quiere agregar: ");
+                        cantElementos = in.nextInt();
+                        datosMazo.setCantElementos(cantElementos);
+                        lis_elementos = datosMazo.generarLista(datosMazo.getCantElementos());
+                        System.out.println("Ingrese cantidad de elementos por carta: ");
+                        numC = in.nextInt();
+                        datosMazo.setNumC(numC);
+                        System.out.println("Ingrese cantidad de cartas que quiere generar: ");
+                        maxC = in.nextInt();
+                        datosMazo.setMaxC(maxC);
+                        System.out.println("Cuantos jugadores tendra la partida?");
+                        numP = in.nextInt();
+                        datosJugadores.setNumP(numP);
+                        mazo = datosMazo.generarMazo(lis_elementos, datosMazo.getNumC(), datosMazo.getMaxC());
+                        System.out.println("Juego creado con exito");
+                        break;
+                case 2: jugadores = datosJugadores.registrarJugador(jugadores, numP);
+                        puntajes.add(0);
+                        break;
                 case 3:
                     datosJuego();
                     break;

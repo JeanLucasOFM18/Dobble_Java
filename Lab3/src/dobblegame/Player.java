@@ -74,22 +74,6 @@ public class Player {
         }
     }
 
-    public void scorePersonal(String nombre, List<String> jugadores, List<Integer> puntajes){
-
-        int i = 0;
-        int largo = jugadores.size();
-        String jugador;
-        while(i < largo) {
-            jugador = jugadores.get(i);
-            if (equals(nombre, jugador) == true){
-                System.out.println("Su puntaje es: " + puntajes.get(i));
-                i = largo;
-            } else {
-                i = i + 1;
-            }
-        }
-    }
-
     public boolean equals(String objeto1, String objeto2){
 
         if(objeto1.compareTo(objeto2) == 0){

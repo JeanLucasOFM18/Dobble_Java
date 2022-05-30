@@ -4,16 +4,14 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
-import dobblegame.Player;
-import main.Main;
-import dobblegame.Dobble;
-import dobblegame.Card;
+import dobblegame.*;
 
 public class Menu {
 
     Dobble datosMazo = new Dobble();
     Player datosJugadores = new Player();
     Card datosCarta = new Card();
+    DobbleGame datosJuego = new DobbleGame();
 
     public void ejecutarMenu() {
 
@@ -60,12 +58,10 @@ public class Menu {
                         break;
                 case 3: datosJuego(lis_elementos, mazo, datosMazo.getMaxC(), datosMazo.getNumC(), puntajes, jugadores);
                         break;
-                case 4:
-                    jugar();
-                    break;
-                case 5:
-                    i = 1;
-                    break;
+                case 4: jugar(mazo, jugadores, puntajes, datosMazo.getNumC(), datosJugadores.getNumP());
+                        break;
+                case 5: i = 1;
+                        break;
             }
         }
     }
@@ -95,7 +91,7 @@ public class Menu {
                             break;
                     case 3: opcionJugador(puntajes, jugadores);
                             break;
-                    case 4: opcionJuego();
+                    case 4: opcionJuego(mazo, jugadores, puntajes);
                             break;
                     case 5: i = 1;
                             break;
@@ -105,30 +101,60 @@ public class Menu {
 
     }
 
-    public void jugar() {
+    public void jugar(List<String> mazo, List<String> jugadores, List<Integer> puntajes, int numC, int numP) {
 
         Scanner in = new Scanner(System.in);
+        int turno = 0;
+        int resultado;
+        String estado = "No iniciado";
+        List mesa = new ArrayList();
 
         int i = 0;
         while (i == 0) {
             System.out.println("### MENU JUEGO ###");
             System.out.println("Escoja su opcion:");
-            System.out.println("1. Consultar turno");
-            System.out.println("2. Ver cartas volteadas");
-            System.out.println("3. Senalar igualdad");
-            System.out.println("4. Pasar de turno");
-            System.out.println("5. Volver atras");
+            System.out.println("1. Estado del juego");
+            System.out.println("2. Consultar turno");
+            System.out.println("3. Consultar puntajes");
+            System.out.println("4. Ver cartas volteadas");
+            System.out.println("5. Senalar igualdad");
+            System.out.println("6. Pasar de turno");
+            System.out.println("7. Juego a String");
+            System.out.println("8. Finalizar juego");
+            System.out.println("9. Volver atras");
             int opcion = in.nextInt();
             switch (opcion) {
-                case 1: System.out.println("El turno es de: Juan");
+                case 1: datosJuego.status(estado);
                         break;
-                case 2: System.out.println("Carta 1: [A,B,C] | Carta 2: [A,D,E]");
+                case 2: datosJuego.whoseTurnIsIt2(jugadores, turno);
                         break;
-                case 3: System.out.println("Igualdad correcta/incorrecta");
+                case 3: datosJuego.score(jugadores, puntajes);
                         break;
-                case 4: System.out.println("Turno saltado con exito");
+                case 4: mesa = datosJuego.voltearCartas(mazo, numC);
+                        estado = "Iniciado";
                         break;
-                case 5: i = 1;
+                case 5: resultado = datosJuego.senalarIgualdad(mazo, turno, jugadores, puntajes, numC);
+                        if(resultado == 0){
+                            System.out.println(jugadores.get(turno) + " se lleva las 2 cartas volteadas");
+                            puntajes = datosJuego.sumaPuntaje(turno, puntajes);
+                            turno = datosJuego.passTurn(turno, numP);
+                            mazo = datosJuego.eliminarCartas(mazo, numC);
+                        }
+                        else{
+                            turno = datosJuego.passTurn(turno, numP);
+                            mazo = datosJuego.devolverAlMazo(mazo, numC);
+                            System.out.println("Cartas devueltas al mazo");
+                        }
+                        break;
+                case 6: turno = datosJuego.passTurn(turno, numP);
+                        System.out.println("Turno saltado con exito");
+                        break;
+                case 7: datosJuego.gameToString(jugadores, puntajes, turno, estado, mesa, numP, numC);
+                        break;
+                case 8: // datosJuego.endGame(jugadores, puntajes);
+                        estado = "Finalizado";
+                        break;
+                case 9: i = 1;
                         break;
             }
         }
@@ -201,24 +227,21 @@ public class Menu {
         String nombre = in.nextLine();
         int i = 0;
         while(i == 0){
-            System.out.println("### DATOS DEL JUEGO ###");
+            System.out.println("### DATOS DEL JUGADOR ###");
             System.out.println("Escoja su opcion:");
             System.out.println("1. Consultar turno");
-            System.out.println("2. Consultar puntaje");
             System.out.println("3. Volver atras");
             int opcion = in.nextInt();
             switch (opcion) {
                 case 1: datosJugadores.whoseTurnIsIt(nombre, jugadores);
                         break;
-                case 2: datosJugadores.scorePersonal(nombre, jugadores, puntajes);
-                        break;
-                case 3: i = 1;
+                case 2: i = 1;
                         break;
             }
         }
     }
 
-    public void opcionJuego(){
+    public void opcionJuego(List<String> mazo, List<String> jugadores, List<Integer> puntajes){
 
         Scanner in = new Scanner(System.in);
         int i = 0;
@@ -226,24 +249,15 @@ public class Menu {
             System.out.println("### DATOS DEL JUEGO ###");
             System.out.println("Escoja su opcion:");
             System.out.println("1. Lista de jugadores");
-            System.out.println("2. Consultar turno actual");
-            System.out.println("3. Estado del juego");
-            System.out.println("4. Lista de puntajes");
-            System.out.println("5. Juego a String");
-            System.out.println("6. Volver atras");
+            System.out.println("2. Consultar orden de los turnos");
+            System.out.println("3. Volver atras");
             int opcion = in.nextInt();
             switch (opcion) {
-                case 1: System.out.println("Lista de Jugadores: Juan, Emilia...");
+                case 1: datosJuego.listaJugadores(jugadores);
                         break;
                 case 2: System.out.println("El turno actual es de Juan");
                         break;
-                case 3: System.out.println("El estado del juego es: No iniciado");
-                        break;
-                case 4: System.out.println("Los puntajes son: X, Y, Z");
-                        break;
-                case 5: System.out.println("Juego visto como String");
-                        break;
-                case 6: i = 1;
+                case 3: i = 1;
                         break;
             }
         }

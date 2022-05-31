@@ -72,6 +72,30 @@ public class Dobble {
         return lis_elementos;
     }
 
+    public boolean comprobarDatos(List<String> lis_elementos, int numC){
+
+        int resultado = calculo(numC);
+        int largo = lis_elementos.size();
+
+        if(resultado <= largo){
+            return true;
+        }
+        else{
+            return false;
+        }
+    }
+
+    public void senalarError(List<String> lis_elementos, int numC){
+
+        int resultado = calculo(numC);
+        int largo = lis_elementos.size();
+
+        int faltantes = resultado - largo;
+
+        System.out.println("Para crear el set de cartas correcto se necesita agregar " + faltantes + " elementos");
+
+    }
+
     public List<String> generarMazo (List<String> lis_elementos, int numC, int maxC){
         List<String> cards = new ArrayList<>();
         List<String> setUsuario = new ArrayList<>();
@@ -161,6 +185,7 @@ public class Dobble {
 
         int i = 0;
         int j = 0;
+        System.out.println("El mazo es: ");
         while(i < maxC){
             List sublista = mazo.subList(j,(j+numC));
             System.out.println(sublista);

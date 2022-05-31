@@ -17,6 +17,7 @@ public class Menu {
 
         Scanner in = new Scanner(System.in);
         int cantElementos;
+        int habilitador;
         int numC = 0;
         int maxC = 0;
         int numP = 0;
@@ -44,21 +45,51 @@ public class Menu {
                         System.out.println("Ingrese cantidad de elementos por carta: ");
                         numC = in.nextInt();
                         datosMazo.setNumC(numC);
-                        System.out.println("Ingrese cantidad de cartas que quiere generar: ");
-                        maxC = in.nextInt();
-                        datosMazo.setMaxC(maxC);
-                        System.out.println("Cuantos jugadores tendra la partida?");
-                        numP = in.nextInt();
-                        datosJugadores.setNumP(numP);
-                        mazo = datosMazo.generarMazo(lis_elementos, datosMazo.getNumC(), datosMazo.getMaxC());
-                        System.out.println("Juego creado con exito");
+                        if (datosMazo.comprobarDatos(lis_elementos, numC) == true) {
+                            System.out.println("Ingrese cantidad de cartas que quiere generar: ");
+                            maxC = in.nextInt();
+                            datosMazo.setMaxC(maxC);
+                            System.out.println("Cuantos jugadores tendra la partida?");
+                            numP = in.nextInt();
+                            datosJugadores.setNumP(numP);
+                            mazo = datosMazo.generarMazo(lis_elementos, datosMazo.getNumC(), datosMazo.getMaxC());
+                            System.out.println("Juego creado con exito");
+                        }
+                        else {
+                            datosMazo.senalarError(lis_elementos, numC);
+                            datosMazo.setNumC(0);
+                            System.out.println("Favor crear el juego nuevamente con los datos correctos");
+                        }
                         break;
                 case 2: jugadores = datosJugadores.registrarJugador(jugadores, datosJugadores.getNumP());
                         puntajes.add(0);
                         break;
                 case 3: datosJuego(lis_elementos, mazo, datosMazo.getMaxC(), datosMazo.getNumC(), puntajes, jugadores);
                         break;
-                case 4: jugar(mazo, jugadores, puntajes, datosMazo.getNumC(), datosJugadores.getNumP());
+                case 4: if(datosMazo.getNumC() == 0) {
+                            System.out.println("Debe crear el juego para acceder a esta funcion");
+                        }
+                        else {
+                            habilitador = datosMazo.calculo(datosMazo.getNumC());
+                            if (datosJuego.comprobarDatos(datosMazo.getMaxC(), habilitador, datosJugadores.getNumP(), jugadores) == 0) {
+                                jugar(mazo, jugadores, puntajes, datosMazo.getNumC(), datosJugadores.getNumP());
+                            }
+                            if (datosJuego.comprobarDatos(datosMazo.getMaxC(), habilitador, datosJugadores.getNumP(), jugadores) == 1) {
+                                System.out.println("No posee la cantidad necesaria de cartas para jugar");
+                                System.out.println("Desea generar el maximo numero de cartas para poder jugar?");
+                                System.out.println("1. SI");
+                                System.out.println("2. NO");
+                                int eleccion = in.nextInt();
+                                if (eleccion == 1) {
+                                    datosMazo.setMaxC(habilitador);
+                                    mazo = datosMazo.generarMazo(lis_elementos, datosMazo.getNumC(), datosMazo.getMaxC());
+                                    System.out.println("Mazo generado con exito");
+                                }
+                            }
+                            else {
+                                System.out.println("No ha registrado a la totalidad de jugadores para jugar");
+                            }
+                        }
                         break;
                 case 5: i = 1;
                         break;
@@ -66,13 +97,13 @@ public class Menu {
         }
     }
 
-    public void datosJuego(List<String> elementos, List<String> mazo, int maxC, int numC, List<Integer> puntajes, List<String> jugadores){
+    public void datosJuego(List<String> elementos, List<String> mazo, int maxC, int numC, List<Integer> puntajes, List<String> jugadores) {
 
-        if(numC == 0){
+        if (numC == 0) {
             System.out.println("Debe crear el juego para acceder a esta funcion");
         }
 
-        else{
+        else {
             Scanner in = new Scanner(System.in);
             int i = 0;
             while (i == 0) {
@@ -130,17 +161,22 @@ public class Menu {
                         break;
                 case 3: datosJuego.score(jugadores, puntajes);
                         break;
-                case 4: mesa = datosJuego.voltearCartas(mazo, numC);
-                        estado = "Iniciado";
+                case 4: if(mazo.size() < numC * 2){
+                            System.out.println("Ya no se puede seguir jugando, favor terminar el juego");
+                        }
+                        else{
+                            mesa = datosJuego.voltearCartas(mazo, numC);
+                            estado = "Iniciado";
+                        }
                         break;
                 case 5: resultado = datosJuego.senalarIgualdad(mazo, turno, jugadores, puntajes, numC);
-                        if(resultado == 0){
+                        if (resultado == 0) {
                             System.out.println(jugadores.get(turno) + " se lleva las 2 cartas volteadas");
                             puntajes = datosJuego.sumaPuntaje(turno, puntajes);
                             turno = datosJuego.passTurn(turno, numP);
                             mazo = datosJuego.eliminarCartas(mazo, numC);
                         }
-                        else{
+                        if (resultado == 1) {
                             turno = datosJuego.passTurn(turno, numP);
                             mazo = datosJuego.devolverAlMazo(mazo, numC);
                             System.out.println("Cartas devueltas al mazo");
@@ -151,7 +187,7 @@ public class Menu {
                         break;
                 case 7: datosJuego.gameToString(jugadores, puntajes, turno, estado, mesa, numP, numC);
                         break;
-                case 8: // datosJuego.endGame(jugadores, puntajes);
+                case 8: datosJuego.endGame(jugadores, puntajes, numP);
                         estado = "Finalizado";
                         break;
                 case 9: i = 1;
@@ -176,8 +212,7 @@ public class Menu {
             System.out.println("7. Volver atras");
             int opcion = in.nextInt();
             switch (opcion) {
-                case 1: System.out.println("El mazo es: ");
-                        datosMazo.mostrarMazo(numC, maxC, mazo);
+                case 1: datosMazo.mostrarMazo(numC, maxC, mazo);
                         break;
                 case 2: datosMazo.dobbleGame(mazo, numC);
                         break;
@@ -230,7 +265,7 @@ public class Menu {
             System.out.println("### DATOS DEL JUGADOR ###");
             System.out.println("Escoja su opcion:");
             System.out.println("1. Consultar turno");
-            System.out.println("3. Volver atras");
+            System.out.println("2. Volver atras");
             int opcion = in.nextInt();
             switch (opcion) {
                 case 1: datosJugadores.whoseTurnIsIt(nombre, jugadores);
@@ -255,7 +290,7 @@ public class Menu {
             switch (opcion) {
                 case 1: datosJuego.listaJugadores(jugadores);
                         break;
-                case 2: System.out.println("El turno actual es de Juan");
+                case 2: datosJuego.turnos(jugadores);
                         break;
                 case 3: i = 1;
                         break;

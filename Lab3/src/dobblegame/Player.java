@@ -1,59 +1,36 @@
 package dobblegame;
 
+import javax.swing.*;
 import java.util.Scanner;
 import java.util.ArrayList;
 import java.util.List;
 
+import dobblegame.DobbleGame;
+
 public class Player {
 
-    private int numP;
+    private String nombre;
+    private Integer puntaje;
 
-    public int getNumP() {
-        return numP;
+    public Player(String nombre, Integer puntaje) {
+        this.nombre = nombre;
+        this.puntaje = puntaje;
     }
 
-    public void setNumP(int numP) {
-        this.numP = numP;
+    public String getNombre() {
+        return nombre;
     }
 
-    public List<String> registrarJugador(List<String> jugadores, int numP){
+    public void setNombre(String nombre) {
+        this.nombre = nombre;
+    }
 
-        if(numP == 0){
-            System.out.println("Debe crear el juego para acceder a esta funcion");
-            return jugadores;
-        }
+    public Integer getPuntaje() {
+        return puntaje;
+    }
 
-        Scanner in = new Scanner(System.in);
-        int largo = jugadores.size();
-
-        if(largo == numP){
-            System.out.println("Ya se ha registrado la cantidad maxima de jugadores");
-            return jugadores;
-        }
-
-        System.out.println("Ingrese el nombre del jugador: ");
-        String nombre = in.nextLine();
-
-        int i = 0;
-        int j = 0;
-        while(i < largo){
-            String nombre2 = jugadores.get(i);
-            if(equals(nombre, nombre2) == true){
-                System.out.println("Ya existe un jugador con ese nombre");
-                i = largo;
-                j = 1;
-            }
-            else{
-                i = i + 1;
-            }
-        }
-
-        if(largo < numP && j == 0){
-            jugadores.add(nombre);
-            System.out.println("Registro exitoso");
-        }
-
-        return jugadores;
+    public void setPuntaje(Integer puntaje) {
+        this.puntaje = puntaje;
     }
 
     public void whoseTurnIsIt(String nombre, List<String> jugadores){

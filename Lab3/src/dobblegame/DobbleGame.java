@@ -7,6 +7,69 @@ import java.util.List;
 
 public class DobbleGame {
 
+    private List<Player> jugadores;
+    private int numP;
+
+    public DobbleGame() {
+        this.jugadores = new ArrayList<Player>();
+        this.numP = 0;
+    }
+
+    public List<Player> getJugadores() {
+        return jugadores;
+    }
+
+    public void setJugadores(List<Player> jugadores) {
+        this.jugadores = jugadores;
+    }
+
+    public int getNumP() {
+        return numP;
+    }
+
+    public void setNumP(int numP) {
+        this.numP = numP;
+    }
+
+    public void registrarJugador(){
+
+        if(getNumP() == 0){
+            System.out.println("Debe crear el juego para acceder a esta funcion");
+        }
+
+        Scanner in = new Scanner(System.in);
+        int largo = getJugadores().size();
+
+        if(largo == getNumP()){
+            System.out.println("Ya se ha registrado la cantidad maxima de jugadores");
+        }
+
+        System.out.println("Ingrese el nombre del jugador: ");
+        String nombre = in.nextLine();
+
+        int i = 0;
+        int j = 0;
+        while(i < largo){
+            String nombre2 = getJugadores().get(i).getNombre();
+            if(equals(nombre, nombre2) == true){
+                System.out.println("Ya existe un jugador con ese nombre");
+                i = largo;
+                j = 1;
+            }
+            else{
+                i = i + 1;
+            }
+        }
+
+        if(largo < getNumP() && j == 0){
+            Player jugador = new Player(nombre, 0);
+            List<Player> listaJugadores = getJugadores();
+            listaJugadores.add(jugador);
+            setJugadores(listaJugadores);
+            System.out.println("Registro exitoso");
+        }
+    }
+
     public int comprobarDatos(int maxC, int cartas, int numP, List<String> jugadores){
 
         int largo = jugadores.size();

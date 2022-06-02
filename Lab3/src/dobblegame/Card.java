@@ -6,65 +6,18 @@ import java.util.List;
 
 public class Card {
 
-    public void nthCard(List<String> mazo, int numC){
+    private List<String> carta;
 
-        Scanner in = new Scanner(System.in);
-        System.out.println("Que carta busca?");
-        int posicion = in.nextInt();
-
-        int i = 0;
-        int j = 0;
-        while(i < posicion){
-            j = j + numC;
-            i = i + 1;
-        }
-
-        List sublista = mazo.subList(j,(j+numC));
-        System.out.println("La carta escogida es: " + sublista);
+    public Card(List<String> elementos) {
+        this.carta = elementos;
     }
 
-    public void findTotalCards(List<String> mazo, int numC){
-
-        Scanner in = new Scanner(System.in);
-        System.out.println("Que carta quiere usar de muestra?");
-        int carta = in.nextInt();
-
-        int i = 0;
-        int j = 0;
-        while(i < carta){
-            j = j + numC;
-            i = i + 1;
-        }
-
-        List sublista = mazo.subList(j,(j+numC));
-
-        int largoSublista = sublista.size();
-
-        int total = calculo(largoSublista);
-
-        System.out.println("La cantidad de cartas necesarias son: " + total);
+    public List<String> getCarta() {
+        return carta;
     }
 
-    public void requiredElements(List<String> mazo, int numC){
-
-        Scanner in = new Scanner(System.in);
-        System.out.println("Que carta quiere usar de muestra?");
-        int carta = in.nextInt();
-
-        int i = 0;
-        int j = 0;
-        while(i < carta){
-            j = j + numC;
-            i = i + 1;
-        }
-
-        List sublista = mazo.subList(j,(j+numC));
-
-        int largoSublista = sublista.size();
-
-        int total = calculo(largoSublista);
-
-        System.out.println("La cantidad de elementos necesarios son: " + total);
+    public void setCarta(List<String> carta) {
+        this.carta = carta;
     }
 
     public int calculo (int numC){

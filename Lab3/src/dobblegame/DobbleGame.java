@@ -5,14 +5,46 @@ import java.util.Scanner;
 import java.util.ArrayList;
 import java.util.List;
 
+import dobblegame.Dobble;
+
 public class DobbleGame {
 
+    private Dobble mazo;
     private List<Player> jugadores;
     private int numP;
+    private String estado;
+    private int turno;
 
     public DobbleGame() {
         this.jugadores = new ArrayList<Player>();
         this.numP = 0;
+        this.estado = "No iniciado";
+        this.turno = 0;
+        this.mazo = new Dobble();
+    }
+
+    public int getTurno() {
+        return turno;
+    }
+
+    public void setTurno(int turno) {
+        this.turno = turno;
+    }
+
+    public Dobble getMazo() {
+        return mazo;
+    }
+
+    public void setMazo(Dobble mazo) {
+        this.mazo = mazo;
+    }
+
+    public String getEstado() {
+        return estado;
+    }
+
+    public void setEstado(String estado) {
+        this.estado = estado;
     }
 
     public List<Player> getJugadores() {
@@ -33,52 +65,57 @@ public class DobbleGame {
 
     public void registrarJugador(){
 
-        if(getNumP() == 0){
+        int k = 0;
+        if(getNumP() == 0 && k == 0){
             System.out.println("Debe crear el juego para acceder a esta funcion");
+            k = 1;
         }
 
         Scanner in = new Scanner(System.in);
         int largo = getJugadores().size();
 
-        if(largo == getNumP()){
+        if(largo == getNumP() && k == 0){
             System.out.println("Ya se ha registrado la cantidad maxima de jugadores");
+            k = 1;
         }
 
-        System.out.println("Ingrese el nombre del jugador: ");
-        String nombre = in.nextLine();
-
-        int i = 0;
-        int j = 0;
-        while(i < largo){
-            String nombre2 = getJugadores().get(i).getNombre();
-            if(equals(nombre, nombre2) == true){
-                System.out.println("Ya existe un jugador con ese nombre");
-                i = largo;
-                j = 1;
+        if(largo < getNumP() && k == 0){
+            System.out.println("Ingrese el nombre del jugador: ");
+            String nombre = in.nextLine();
+            int i = 0;
+            int j = 0;
+            while(i < largo){
+                String nombre2 = getJugadores().get(i).getNombre();
+                if(equals(nombre, nombre2) == true){
+                    System.out.println("Ya existe un jugador con ese nombre");
+                    i = largo;
+                    j = 1;
+                }
+                else{
+                    i = i + 1;
+                }
             }
-            else{
-                i = i + 1;
+            if(j == 0){
+                Player jugador = new Player(nombre, 0);
+                List<Player> listaJugadores = getJugadores();
+                listaJugadores.add(jugador);
+                setJugadores(listaJugadores);
+                System.out.println("Registro exitoso");
             }
-        }
-
-        if(largo < getNumP() && j == 0){
-            Player jugador = new Player(nombre, 0);
-            List<Player> listaJugadores = getJugadores();
-            listaJugadores.add(jugador);
-            setJugadores(listaJugadores);
-            System.out.println("Registro exitoso");
         }
     }
 
-    public int comprobarDatos(int maxC, int cartas, int numP, List<String> jugadores){
+    public int comprobarDatos(){
 
-        int largo = jugadores.size();
+        int largo = getJugadores().size();
+        int numC = getMazo().getNumC();
+        int cartasNecesarias = getMazo().calculo(numC);
 
-        if(maxC == cartas && numP == largo){
+        if(getMazo().getMaxC() == cartasNecesarias && getNumP() == largo){
             return 0;
         }
         else{
-            if(maxC != cartas){
+            if(getMazo().getMaxC() != cartasNecesarias){
                 return 1;
             }
             else{
@@ -87,116 +124,121 @@ public class DobbleGame {
         }
     }
 
-    public void listaJugadores(List<String> jugadores){
+    public void listaJugadores(){
 
         int i = 0;
         int j = 1;
-        int largo = jugadores.size();
-        String nombre;
+        int largo = getJugadores().size();
+
 
         while(i < largo){
-            nombre = jugadores.get(i);
-            System.out.println("Jugador " + j + ": " + nombre);
+            System.out.println("Jugador " + j + ": " + getJugadores().get(i).getNombre());
             i = i + 1;
             j = j + 1;
         }
 
     }
 
-    public void turnos(List<String> jugadores){
-
-        int largo = jugadores.size();
-        int i = 0;
-        int j = 1;
-        while(i < largo){
-            System.out.println(j + ". " + jugadores.get(i));
-            j = j + 1;
-            i = i + 1;
-        }
-
-    }
-
-    public void status(String estado){
-
-        System.out.println("El estado del juego es: " + estado);
-    }
-
-    public void score(List<String> jugadores, List<Integer> puntajes){
+    public void listaPuntajes(){
 
         int i = 0;
         int j = 1;
-        int largo = jugadores.size();
-        String nombre;
-        int puntaje;
+        int largo = getJugadores().size();
+
 
         while(i < largo){
-            nombre = jugadores.get(i);
-            puntaje = puntajes.get(i);
-            System.out.println("El puntaje de " + nombre + " es: " + puntaje);
+            System.out.println(getJugadores().get(i).getNombre() + ": " + getJugadores().get(i).getPuntaje());
             i = i + 1;
             j = j + 1;
         }
 
     }
 
-    public void whoseTurnIsIt2(List<String> jugadores, int turno) {
+    public void turnos(){
+
+        int largo = getJugadores().size();
+        int i = 0;
+        int j = 1;
+        while(i < largo){
+            System.out.println(j + ". " + getJugadores().get(i).getNombre());
+            j = j + 1;
+            i = i + 1;
+        }
+
+    }
+
+    public void status(){
+
+        System.out.println("El estado del juego es: " + getEstado());
+    }
+
+    public void score(){
 
         int i = 0;
-        int largo = jugadores.size();
-        String jugador;
+        int j = 1;
+        int largo = getJugadores().size();
+
+        while(i < largo){
+            System.out.println("El puntaje de " + getJugadores().get(i).getNombre() + " es: " + getJugadores().get(i).getPuntaje());
+            i = i + 1;
+            j = j + 1;
+        }
+
+    }
+
+    public void whoseTurnIsIt() {
+
+        int i = 0;
+        int largo = getJugadores().size();
         while (i < largo) {
-            if (i == turno) {
-                jugador = jugadores.get(i);
-                System.out.println("El turno es de: " + jugador);
+            if (i == getTurno()) {
+                System.out.println("El turno es de: " + getJugadores().get(i).getNombre());
                 i = largo;
-            } else {
+            }
+            else {
                 i = i + 1;
             }
         }
     }
 
-    public List<String> voltearCartas(List<String> mazo, int numC){
+    public void voltearCartas(){
 
-        int i = mazo.size();
+        int i = getMazo().getMazo().size() - 1;
+        int j = i - 1;
 
-        List sublista = mazo.subList(i - numC, i);
-        i = i - numC;
-        List sublista2 = mazo.subList(i - numC, i);
-
-        System.out.println("Carta 1: " + sublista + " | Carta 2: " + sublista2);
-
-        sublista.addAll(sublista2);
-
-        return sublista;
+        System.out.println("Carta 1: " + getMazo().getMazo().get(i).getCarta() + " | Carta 2: " + getMazo().getMazo().get(j).getCarta());
 
     }
 
-    public int passTurn(int turno, int numP){
+    public void passTurn(){
 
         int turnoNuevo;
 
-        if(turno == numP - 1){
+        if(getTurno() == getNumP() - 1){
             turnoNuevo = 0;
         }
+
         else{
-            turnoNuevo = turno + 1;
+            turnoNuevo = getTurno() + 1;
         }
 
-        return turnoNuevo;
+        setTurno(turnoNuevo);
+        System.out.println("Turno saltado con exito");
+
     }
 
-    public int senalarIgualdad(List<String> mazo, int turno, List<String> jugadores, List<Integer> puntajes, int numC){
+    public int senalarIgualdad(){
 
         Scanner in = new Scanner(System.in);
         System.out.println("Ingrese su nombre: ");
         String nombre = in.nextLine();
-        String nombreTurno = jugadores.get(turno);
+        String nombreTurno = getJugadores().get(getTurno()).getNombre();
         int comparacion;
 
         if(equals(nombre, nombreTurno) == true){
             System.out.println("Ingrese la coincidencia encontrada: ");
             String coincidencia = in.nextLine();
-            comparacion = validarcoincidencia(coincidencia, mazo, numC);
+            comparacion = validarcoincidencia(coincidencia);
             if(comparacion == 0){
                 System.out.println("Coincidencia correcta");
                 return 0;
@@ -212,23 +254,21 @@ public class DobbleGame {
         }
     }
 
-    public int validarcoincidencia(String coincidencia, List<String> mazo, int numC){
+    public int validarcoincidencia(String coincidencia){
 
-        int i = mazo.size();
+        int k = getMazo().getMazo().size() - 1;
+        int m = k - 1;
 
-        List sublista = mazo.subList(i - numC, i);
-        i = i - numC;
-        List sublista2 = mazo.subList(i - numC, i);
 
-        i = 0;
+        int i = 0;
         int j = 0;
         String coincidenciaCorrecta = "";
         String elemento;
         String elemento2;
-        while(i < numC){
-            elemento = (String) sublista.get(i);
-            while(j < numC){
-                elemento2 = (String) sublista2.get(j);
+        while(i < getMazo().getNumC()){
+            elemento = getMazo().getMazo().get(k).getCarta().get(i);
+            while(j < getMazo().getNumC()){
+                elemento2 = getMazo().getMazo().get(m).getCarta().get(j);
                 if(equals(elemento, elemento2) == true){
                     coincidenciaCorrecta = elemento2;
                     j = j + 1;
@@ -249,16 +289,16 @@ public class DobbleGame {
         }
     }
 
-    public List<Integer> sumaPuntaje(int turno, List<Integer> puntajes){
+    public void sumaPuntaje(){
 
         int i = 0;
-        int largo = puntajes.size();
+        int largo = getJugadores().size();
 
         while(i < largo){
-            if(i == turno){
-                int puntos = puntajes.get(i);
-                puntajes.remove(i);
-                puntajes.add(i, puntos + 2);
+            if(i == getTurno()){
+                int puntos = getJugadores().get(i).getPuntaje();
+                puntos = puntos + 2;
+                getJugadores().get(i).setPuntaje(puntos);
                 i = largo;
             }
             else{
@@ -266,50 +306,34 @@ public class DobbleGame {
             }
         }
 
-        return puntajes;
     }
 
-    public List<String> eliminarCartas(List<String> mazo, int numC){
+    public void eliminarCartas(){
 
-        int i = mazo.size() - 1;
+        int i = getMazo().getMazo().size() - 1;
         int j = 0;
-        int k = numC * 2;
 
-        while(j < k){
-            mazo.remove(i);
+        while(j < 2){
+            getMazo().getMazo().remove(i);
             i = i - 1;
             j = j + 1;
         }
 
-        return mazo;
     }
 
-    public List<String> devolverAlMazo(List<String> mazo, int numC){
+    public void devolverAlMazo(){
 
-        int i = mazo.size() - 1;
-        int j = 0;
-        int k = numC * 2;
-        List<String> cartas = new ArrayList();
+        int i = getMazo().getMazo().size() - 1;
 
-        while(j < k){
-            String elemento = mazo.get(i);
-            cartas.add(elemento);
-            mazo.remove(i);
-            i = i - 1;
-            j = j + 1;
-        }
+        Card carta = getMazo().getMazo().get(i);
+        Card carta2 = getMazo().getMazo().get(i-1);
 
-        j = 0;
-        i = cartas.size() - 1;
-        while(j < k){
-            String elemento2 = cartas.get(i);
-            mazo.add(j, elemento2);
-            cartas.remove(i);
-            i = i - 1;
-            j = j + 1;
-        }
+        getMazo().getMazo().remove(i);
+        getMazo().getMazo().remove(i-1);
 
-        return mazo;
+        getMazo().getMazo().add(0, carta);
+        getMazo().getMazo().add(1, carta2);
+
     }
 
     public void gameToString(List<String> jugadores, List<Integer> puntajes, int turno, String estado, List<String> mesa, int numP, int numC){
@@ -342,15 +366,23 @@ public class DobbleGame {
 
     }
 
-    public void endGame(List<String> jugadores, List<Integer> puntajes, int numP){
+    public void endGame(){
+
+        List<Integer> puntajes = new ArrayList<>();
+        int largo = getJugadores().size();
+        int i = 0;
+        while(i < largo){
+            puntajes.add(getJugadores().get(i).getPuntaje());
+            i = i + 1;
+        }
 
         int puntajeMax = Collections.max(puntajes);
 
         int contador = 0;
         int posicion = 0;
-        int i = 0;
-        while(i < numP){
-            if(puntajes.get(i) == puntajeMax){
+        i = 0;
+        while(i < getNumP()){
+            if(getJugadores().get(i).getPuntaje() == puntajeMax){
                 contador = contador + 1;
                 posicion = i;
             }
@@ -361,25 +393,25 @@ public class DobbleGame {
             System.out.println("La partida terminó en empate");
         }
         else{
-            System.out.println("El ganador es: " + jugadores.get(posicion));
+            System.out.println("El ganador es: " + getJugadores().get(posicion).getNombre());
         }
 
         System.out.println("# POSICIONES FINALES #");
 
         i = 0;
         int j = 0;
-        while(i < numP){
+        while(i < getNumP()){
             int k = i + 1;
-            while(j < numP){
-                if(puntajes.get(j) == puntajeMax){
-                    System.out.println(k + ". " + jugadores.get(j) + "con " + puntajes.get(j) + " puntos");
+            while(j < getNumP()){
+                if(getJugadores().get(j).getPuntaje() == puntajeMax){
+                    System.out.println(k + ". " + getJugadores().get(j).getNombre() + " con " + getJugadores().get(j).getPuntaje() + " puntos");
                 }
                 j = j + 1;
             }
             j = 0;
             i = i + 1;
             if(puntajeMax == 0){
-                i = numP;
+                i = getNumP();
             }
             else{
                 puntajeMax = puntajeMax - 2;

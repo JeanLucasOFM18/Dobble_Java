@@ -123,23 +123,22 @@ public class Dobble {
 
     }
 
-    public void generarMazo (){
+    public void generarMazo (int opcion){
 
-        firstCard();
-
-        int maxC = calculo(getNumC());
-        int i = maxC - 1;
-        while(i >= getMaxC()){
-            getMazo().remove(i);
-            i = i - 1;
+        if(opcion == 1){
+            firstCard();
+            int maxC = calculo(getNumC());
+            int i = maxC - 1;
+            while(i >= getMaxC()){
+                getMazo().remove(i);
+                i = i - 1;
+            }
         }
 
-        /*
-        i = 0;
-        while (i < getMaxC()){
-            System.out.println("Carta: " + getMazo().get(i).getCarta());
-            i = i + 1;
-        }*/
+        else{
+            getMazo().removeAll(getMazo());
+            firstCard();
+        }
 
     }
 
@@ -323,7 +322,7 @@ public class Dobble {
         mazoEntero.setMaxC(maxC);
         mazoEntero.setNumC(getNumC());
         mazoEntero.setLis_elementos(getLis_elementos());
-        mazoEntero.generarMazo();
+        mazoEntero.generarMazo(1);
 
         int largo2 = getMazo().size();
         int largo = mazoEntero.getMazo().size();

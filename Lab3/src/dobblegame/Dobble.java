@@ -3,6 +3,7 @@ package dobblegame;
 import java.util.Scanner;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Collections;
 
 public class Dobble {
 
@@ -96,6 +97,7 @@ public class Dobble {
             }
         }
 
+        Collections.shuffle(getLis_elementos());
         System.out.println(getLis_elementos());
     }
 
@@ -139,6 +141,8 @@ public class Dobble {
             getMazo().removeAll(getMazo());
             firstCard();
         }
+
+        Collections.shuffle(getMazo());
 
     }
 
@@ -279,7 +283,12 @@ public class Dobble {
         System.out.println("Que carta busca?");
         int posicion = in.nextInt();
 
-        System.out.println("La carta escogida es: " + getMazo().get(posicion).getCarta());
+        if(posicion > getMaxC() - 1){
+            System.out.println("No existe la carta " + posicion + " en  su mazo");
+        }
+        else{
+            System.out.println("La carta escogida es: " + getMazo().get(posicion).getCarta());
+        }
     }
 
     public void findTotalCards(){
@@ -288,13 +297,15 @@ public class Dobble {
         System.out.println("Que carta quiere usar de muestra?");
         int posicion = in.nextInt();
 
-        List<String> sublista = getMazo().get(posicion).getCarta();
-
-        int largo = sublista.size();
-
-        int total = calculo(largo);
-
-        System.out.println("La cantidad de cartas necesarias son: " + total);
+        if(posicion > getMaxC() - 1){
+            System.out.println("No existe la carta " + posicion + " en su mazo");
+        }
+        else{
+            List<String> sublista = getMazo().get(posicion).getCarta();
+            int largo = sublista.size();
+            int total = calculo(largo);
+            System.out.println("La cantidad de cartas necesarias son: " + total);
+        }
     }
 
     public void requiredElements(){
@@ -303,54 +314,58 @@ public class Dobble {
         System.out.println("Que carta quiere usar de muestra?");
         int posicion = in.nextInt();
 
-        List<String> sublista = getMazo().get(posicion).getCarta();
-
-        int largo = sublista.size();
-
-        int total = calculo(largo);
-
-        System.out.println("La cantidad de elementos necesarios son: " + total);
+        if(posicion > getMaxC() - 1){
+            System.out.println("No existe la carta " + posicion + " en  su mazo");
+        }
+        else{
+            List<String> sublista = getMazo().get(posicion).getCarta();
+            int largo = sublista.size();
+            int total = calculo(largo);
+            System.out.println("La cantidad de elementos necesarios son: " + total);;
+        }
     }
 
     public void missingCards(){
 
-        //List<String> setCompleto = new ArrayList<>();
         int maxC = calculo(getNumC());
+        if(getMazo().size() == maxC){
+            System.out.println("[]");
+        }
+        else{
+            List<Card> setUsuario = getMazo();
+            Dobble mazoEntero = new Dobble();
+            mazoEntero.setMaxC(maxC);
+            mazoEntero.setNumC(getNumC());
+            mazoEntero.setLis_elementos(getLis_elementos());
+            mazoEntero.generarMazo(1);
 
-        List<Card> setUsuario = getMazo();
-        Dobble mazoEntero = new Dobble();
-        mazoEntero.setMaxC(maxC);
-        mazoEntero.setNumC(getNumC());
-        mazoEntero.setLis_elementos(getLis_elementos());
-        mazoEntero.generarMazo(1);
+            int largo2 = getMazo().size();
+            int largo = mazoEntero.getMazo().size();
 
-        int largo2 = getMazo().size();
-        int largo = mazoEntero.getMazo().size();
-
-        int i = 0;
-        int j = 0;
-        int k;
-        int comparacion = 0;
-        while(i < largo){
-            List<String> sublista = mazoEntero.getMazo().get(i).getCarta();
-            while(j < largo2){
-                List<String> sublista2 = setUsuario.get(j).getCarta();
-                comparacion = comparaCartas(sublista, sublista2);
-                if(comparacion == 1){
-                    j = largo2 + 1;
+            int i = 0;
+            int j = 0;
+            int comparacion = 0;
+            while(i < largo){
+                List<String> sublista = mazoEntero.getMazo().get(i).getCarta();
+                while(j < largo2){
+                    List<String> sublista2 = setUsuario.get(j).getCarta();
+                    comparacion = comparaCartas(sublista, sublista2);
+                    if(comparacion == 1){
+                        j = largo2 + 1;
+                    }
+                    else{
+                        j = j + 1;
+                    }
+                }
+                if(comparacion == 0){
+                    System.out.println(mazoEntero.getMazo().get(i).getCarta());
+                    j = 0;
+                    i = i + 1;
                 }
                 else{
-                    j = j + 1;
+                    j = 0;
+                    i = i + 1;
                 }
-            }
-            if(comparacion == 0){
-                System.out.println(mazoEntero.getMazo().get(i).getCarta());
-                j = 0;
-                i = i + 1;
-            }
-            else{
-                j = 0;
-                i = i + 1;
             }
         }
     }
@@ -412,5 +427,16 @@ public class Dobble {
         else{
             return false;
         }
+    }
+
+    @Override
+    public String toString() {
+        return "Dobble{" +
+                "mazo=" + mazo +
+                ", lis_elementos=" + lis_elementos +
+                ", cantElementos=" + cantElementos +
+                ", numC=" + numC +
+                ", maxC=" + maxC +
+                '}';
     }
 }

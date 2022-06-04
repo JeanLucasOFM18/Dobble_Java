@@ -1,11 +1,5 @@
 package dobblegame;
 
-import java.util.Scanner;
-import java.util.ArrayList;
-import java.util.List;
-
-import dobblegame.DobbleGame;
-
 public class Player {
 
     private String nombre;
@@ -32,34 +26,11 @@ public class Player {
         this.puntaje = puntaje;
     }
 
-    public void whoseTurnIsIt(String nombre, List<String> jugadores){
-
-        int i = 0;
-        int largo = jugadores.size();
-        String jugador;
-        while(i < largo){
-            jugador = jugadores.get(i);
-            if(equals(nombre, jugador) == true){
-                i = i + 1;
-                System.out.println("Su posicion es la numero: " + i);
-                i = largo;
-            }
-            else{
-                i = i + 1;
-            }
-        }
+    @Override
+    public String toString() {
+        return "Player{" +
+                "nombre='" + nombre + '\'' +
+                ", puntaje=" + puntaje +
+                '}';
     }
-
-    public boolean equals(String objeto1, String objeto2){
-
-        if(objeto1.compareTo(objeto2) == 0){
-            return true;
-        }
-
-        else{
-            return false;
-        }
-    }
-
-
 }

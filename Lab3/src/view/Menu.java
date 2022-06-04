@@ -1,37 +1,58 @@
 package view;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Scanner;
-
 import dobblegame.*;
 
+/**
+ * Clase que simula un Menu interactivo.
+ * @version 11.0.2
+ * @autor: Jean Lucas Rivera
+ */
 public class Menu {
 
-    Dobble datosMazo;
-    DobbleGame datosJuego;
+    private Dobble datosMazo;
+    private DobbleGame datosJuego;
 
     public Menu() {
         this.datosMazo = new Dobble();
         this.datosJuego = new DobbleGame();
     }
 
+    /**
+     * Obtiene el datosMazo
+     * @return datosMazo Si se obtiene el datosMazo
+     */
     public Dobble getDatosMazo() {
         return datosMazo;
     }
 
+    /**
+     * Modifica el datosMazo
+     * @param datosMazo (Dobble). Corresponde a un Objeto que contiene los atributos y métodos que tienen un mazo
+     */
     public void setDatosMazo(Dobble datosMazo) {
         this.datosMazo = datosMazo;
     }
 
+    /**
+     * Obtiene el datosJuego
+     * @return datosMazo Si se obtiene el datosJuego
+     */
     public DobbleGame getDatosJuego() {
         return datosJuego;
     }
 
+    /**
+     * Modifica el datosJuego
+     * @param datosJuego (DobbleGame). Corresponde a un Objeto que contiene los atributos y métodos que tienen un juego
+     */
     public void setDatosJuego(DobbleGame datosJuego) {
         this.datosJuego = datosJuego;
     }
 
+    /**
+     * Permite ejecutar las distintas funcionalidades del menu
+     */
     public void ejecutarMenu() {
 
         Scanner in = new Scanner(System.in);
@@ -40,10 +61,7 @@ public class Menu {
         int numC;
         int maxC;
         int numP;
-        List mazo = new ArrayList();
-        List jugadores = new ArrayList();
-        List<Integer> puntajes = new ArrayList();
-
+        int modoJuego;
 
         int i = 0;
         while (i == 0) {
@@ -56,25 +74,63 @@ public class Menu {
             System.out.println("5. Salir");
             int opcion = in.nextInt();
             switch (opcion) {
-                case 1: System.out.println("Ingrese cantidad de elementos que quiere agregar: ");
+                case 1: // CREA UN JUEGO
+                        // Se pide ingresar la cantidad de elementos para la creación del mazo
+                        System.out.println("Ingrese cantidad de elementos que quiere agregar: ");
                         cantElementos = in.nextInt();
                         getDatosMazo().setCantElementos(cantElementos);
+                        // Se pide al usuario que ingrese los elementos y se crea una lista
                         getDatosMazo().generarLista();
+                        // Se pide al usuario ingresar la cantidad de elementos que quiere por carta
                         System.out.println("Ingrese cantidad de elementos por carta: ");
                         numC = in.nextInt();
                         getDatosMazo().setNumC(numC);
+                        // Si con la cantidad de elementos por carta se puede obtener con la cantidad de elementos total dado
+                        // se procede con la creación del juego
                         if (datosMazo.comprobarDatos() == true) {
+                            // Se pide al usuario ingresar la cantidad de cartas que quiere generar
                             System.out.println("Ingrese cantidad de cartas que quiere generar: ");
                             maxC = in.nextInt();
                             getDatosMazo().setMaxC(maxC);
-                            System.out.println("Cuantos jugadores tendra la partida?");
-                            numP = in.nextInt();
-                            getDatosJuego().setNumP(numP);
+                            // Se pide seleccionar el modo de juego a crear
+                            // 1. StackMode por turnos con jugadores reales
+                            // 2. StackMode contra la CPU, donde se necesita solo 1 jugador real
+                            System.out.println("Que modo quiere jugar?");
+                            System.out.println("1. StackMode con amigos");
+                            System.out.println("2. StackMode vs CPU");
+                            modoJuego = in.nextInt();
+                            getDatosJuego().setGameMode(modoJuego);
+                            // Si selecciona el modo 1, se pide ingresar la cantidad de jugadores que tendrá el juego
+                            if(getDatosJuego().getGameMode() == 1){
+                                int aux = 0;
+                                while(aux == 0){
+                                    System.out.println("Cuantos jugadores tendra la partida?");
+                                    numP = in.nextInt();
+                                    if(numP > 1){
+                                        getDatosJuego().setNumP(numP);
+                                        aux = 1;
+                                    }
+                                    // El juego debe tener como mínimo 2 jugadores para crearse
+                                    else{
+                                        System.out.println("No puede crearse un juego con 1 jugador, favor volver a ingresar datos");
+                                    }
+                                }
+                            }
+                            // Si selecciona el modo 2, se pide ingresar los datos del único jugador real
+                            else{
+                                numP = 1;
+                                getDatosJuego().setNumP(numP);
+                                getDatosJuego().registrarJugador();
+                            }
+                            // Se crea el mazo con los datos dados
                             getDatosMazo().generarMazo(1);
                             getDatosJuego().setMazo(getDatosMazo());
                             System.out.println("Mazo creado con exito");
                         }
+                        // En caso de no ser posible crear el mazo con la cantidad de datos dados
+                        // Se debe crear el juego nuevamente, ingresando datos correctos
                         else {
+                            // Se indica la cantidad de elementos que hacen falta para crear un mazo
                             getDatosMazo().senalarError();
                             getDatosMazo().setNumC(0);
                             System.out.println("Favor crear el juego nuevamente con los datos correctos");
@@ -91,7 +147,7 @@ public class Menu {
                         else {
                             habilitador = getDatosMazo().calculo(getDatosMazo().getNumC());
                             if (getDatosJuego().comprobarDatos() == 0) {
-                                jugar(mazo, jugadores, puntajes, getDatosMazo().getNumC(), getDatosJuego().getNumP());
+                                jugar();
                             }
                             if (getDatosJuego().comprobarDatos() == 1) {
                                 System.out.println("No posee la cantidad necesaria de cartas para jugar");
@@ -146,13 +202,9 @@ public class Menu {
 
     }
 
-    public void jugar(List<String> mazo, List<String> jugadores, List<Integer> puntajes, int numC, int numP) {
+    public void jugar() {
 
         Scanner in = new Scanner(System.in);
-        int turno = 0;
-        int resultado;
-        String estado = "No iniciado";
-        List mesa = new ArrayList();
 
         int i = 0;
         while (i == 0) {
@@ -161,12 +213,11 @@ public class Menu {
             System.out.println("1. Estado del juego");
             System.out.println("2. Consultar turno");
             System.out.println("3. Consultar puntajes");
-            System.out.println("4. Ver cartas volteadas");
-            System.out.println("5. Senalar igualdad");
-            System.out.println("6. Pasar de turno");
-            System.out.println("7. Juego a String");
-            System.out.println("8. Finalizar juego");
-            System.out.println("9. Volver atras");
+            System.out.println("4. Pasar de turno");
+            System.out.println("5. Jugar");
+            System.out.println("6. Juego a String");
+            System.out.println("7. Finalizar juego");
+            System.out.println("8. Volver atras");
             int opcion = in.nextInt();
             switch (opcion) {
                 case 1: getDatosJuego().status();
@@ -175,36 +226,23 @@ public class Menu {
                     break;
                 case 3: getDatosJuego().score();
                     break;
-                case 4: if(getDatosMazo().getMazo().size() < 2){
+                case 4: getDatosJuego().passTurn();
+                        getDatosJuego().devolverAlMazo();
+                        break;
+                case 5: if(getDatosMazo().getMazo().size() < 2){
                             System.out.println("Ya no se puede seguir jugando, favor terminar el juego");
                         }
                         else{
-                            getDatosJuego().voltearCartas();
+                            getDatosJuego().play();
                             getDatosJuego().setEstado("En juego");
                         }
                         break;
-                case 5: resultado = getDatosJuego().senalarIgualdad();
-                        if (resultado == 0) {
-                            System.out.println(getDatosJuego().getJugadores().get(getDatosJuego().getTurno()).getNombre() + " se lleva las 2 cartas volteadas");
-                            getDatosJuego().sumaPuntaje();
-                            getDatosJuego().passTurn();
-                            getDatosJuego().eliminarCartas();
-                        }
-                        if (resultado == 1) {
-                            getDatosJuego().passTurn();
-                            getDatosJuego().devolverAlMazo();
-                            System.out.println("Cartas devueltas al mazo");
-                        }
+                case 6: //getDatosJuego().gameToString();
                         break;
-                case 6: getDatosJuego().passTurn();
-                        getDatosJuego().devolverAlMazo();
-                        break;
-                case 7: getDatosJuego().gameToString(jugadores, puntajes, turno, estado, mesa, numP, numC);
-                        break;
-                case 8: getDatosJuego().endGame();
+                case 7: getDatosJuego().endGame();
                         getDatosJuego().setEstado("Finalizado");
                         break;
-                case 9: i = 1;
+                case 8: i = 1;
                         break;
             }
         }
@@ -259,8 +297,8 @@ public class Menu {
             System.out.println("Escoja su opcion:");
             System.out.println("1. Consultar lista de jugadores");
             System.out.println("2. Consultar puntajes");
-            System.out.println("2. Consultar orden de los turnos");
-            System.out.println("3. Volver atras");
+            System.out.println("3. Consultar orden de los turnos");
+            System.out.println("4. Volver atras");
             int opcion = in.nextInt();
             switch (opcion) {
                 case 1: getDatosJuego().listaJugadores();

@@ -4,8 +4,7 @@ import java.util.Collections;
 import java.util.Scanner;
 import java.util.ArrayList;
 import java.util.List;
-
-import dobblegame.Dobble;
+import java.util.Random;
 
 public class DobbleGame {
 
@@ -14,6 +13,7 @@ public class DobbleGame {
     private int numP;
     private String estado;
     private int turno;
+    private int gameMode;
 
     public DobbleGame() {
         this.jugadores = new ArrayList<Player>();
@@ -21,6 +21,15 @@ public class DobbleGame {
         this.estado = "No iniciado";
         this.turno = 0;
         this.mazo = new Dobble();
+        this.gameMode = 0;
+    }
+
+    public int getGameMode() {
+        return gameMode;
+    }
+
+    public void setGameMode(int gameMode) {
+        this.gameMode = gameMode;
     }
 
     public int getTurno() {
@@ -65,42 +74,59 @@ public class DobbleGame {
 
     public void registrarJugador(){
 
-        int k = 0;
-        if(getNumP() == 0 && k == 0){
-            System.out.println("Debe crear el juego para acceder a esta funcion");
-            k = 1;
-        }
-
         Scanner in = new Scanner(System.in);
         int largo = getJugadores().size();
 
-        if(largo == getNumP() && k == 0){
-            System.out.println("Ya se ha registrado la cantidad maxima de jugadores");
-            k = 1;
-        }
-
-        if(largo < getNumP() && k == 0){
+        if(getGameMode() == 2 && getNumP() == 1){
+            Player jugador = new Player("CPU", 0);
+            List<Player> listaJugadores = getJugadores();
+            listaJugadores.add(jugador);
+            setJugadores(listaJugadores);
             System.out.println("Ingrese el nombre del jugador: ");
             String nombre = in.nextLine();
-            int i = 0;
-            int j = 0;
-            while(i < largo){
-                String nombre2 = getJugadores().get(i).getNombre();
-                if(equals(nombre, nombre2) == true){
-                    System.out.println("Ya existe un jugador con ese nombre");
-                    i = largo;
-                    j = 1;
-                }
-                else{
-                    i = i + 1;
-                }
+            Player jugador2 = new Player(nombre, 0);
+            List<Player> listaJugadores2 = getJugadores();
+            listaJugadores2.add(jugador2);
+            setJugadores(listaJugadores2);
+            System.out.println("Registro exitoso");
+            setNumP(2);
+        }
+        else{
+            int k = 0;
+            if(getNumP() == 0 && k == 0){
+                System.out.println("Debe crear el juego para acceder a esta funcion");
+                k = 1;
             }
-            if(j == 0){
-                Player jugador = new Player(nombre, 0);
-                List<Player> listaJugadores = getJugadores();
-                listaJugadores.add(jugador);
-                setJugadores(listaJugadores);
-                System.out.println("Registro exitoso");
+
+
+            if(largo == getNumP() && k == 0){
+                System.out.println("Ya se ha registrado la cantidad maxima de jugadores");
+                k = 1;
+            }
+
+            if(largo < getNumP() && k == 0){
+                System.out.println("Ingrese el nombre del jugador: ");
+                String nombre = in.nextLine();
+                int i = 0;
+                int j = 0;
+                while(i < largo){
+                    String nombre2 = getJugadores().get(i).getNombre();
+                    if(equals(nombre, nombre2) == true){
+                        System.out.println("Ya existe un jugador con ese nombre");
+                        i = largo;
+                        j = 1;
+                    }
+                    else{
+                        i = i + 1;
+                    }
+                }
+                if(j == 0){
+                    Player jugador = new Player(nombre, 0);
+                    List<Player> listaJugadores = getJugadores();
+                    listaJugadores.add(jugador);
+                    setJugadores(listaJugadores);
+                    System.out.println("Registro exitoso");
+                }
             }
         }
     }
@@ -336,7 +362,7 @@ public class DobbleGame {
 
     }
 
-    public void gameToString(List<String> jugadores, List<Integer> puntajes, int turno, String estado, List<String> mesa, int numP, int numC){
+    /*public void gameToString(){
 
         int i = 0;
         int j = 1;
@@ -364,7 +390,7 @@ public class DobbleGame {
         List sublista2 = mesa.subList(i, i + numC);
         System.out.println("Carta 1: " + sublista + " | Carta 2: " + sublista2);
 
-    }
+    }*/
 
     public void endGame(){
 
@@ -419,6 +445,70 @@ public class DobbleGame {
         }
     }
 
+    public void play(){
+
+        int i = 0;
+        if(getGameMode() == 1){
+            voltearCartas();
+            int resultado = senalarIgualdad();
+            if(resultado == 0){
+                System.out.println(getJugadores().get(getTurno()).getNombre() + " se lleva las 2 cartas volteadas");
+                sumaPuntaje();
+                passTurn();
+                eliminarCartas();
+                i = 1;
+            }
+            if(resultado == 1){
+                passTurn();
+                devolverAlMazo();
+                System.out.println("Cartas devueltas al mazo");
+                i = 1;
+            }
+            else{
+                System.out.println("Vuelva a ingresar un nombre");
+            }
+        }
+        else{
+            voltearCartas();
+            int resultado = vsCPUMode();
+            if(resultado == 0){
+                System.out.println(getJugadores().get(getTurno()).getNombre() + " se lleva las 2 cartas volteadas");
+                sumaPuntaje();
+                passTurn();
+                eliminarCartas();
+            }
+            else{
+                passTurn();
+                devolverAlMazo();
+                System.out.println("Cartas devueltas al mazo");
+            }
+
+        }
+    }
+    public int vsCPUMode(){
+
+        if(getTurno() == 0){
+            Random aleatorio = new Random();
+            int i = getMazo().getMazo().size() - 1;
+            String coincidencia = getMazo().getMazo().get(i).getCarta().get(aleatorio.nextInt(getMazo().getNumC()));
+            System.out.println("CPU señala que el elemento repetido es: " + coincidencia);
+            int comparacion = validarcoincidencia(coincidencia);
+            if(comparacion == 0){
+                System.out.println("Coincidencia correcta");
+                return 0;
+            }
+            else{
+                System.out.println("Coincidencia incorrecta");
+                return 1;
+            }
+        }
+        else{
+            int resultado = senalarIgualdad();
+            return resultado;
+        }
+
+    }
+
     public boolean equals(String objeto1, String objeto2){
 
         if(objeto1.compareTo(objeto2) == 0){
@@ -428,5 +518,17 @@ public class DobbleGame {
         else{
             return false;
         }
+    }
+
+    @Override
+    public String toString() {
+        return "DobbleGame{" +
+                "mazo=" + mazo +
+                ", jugadores=" + jugadores +
+                ", numP=" + numP +
+                ", estado='" + estado + '\'' +
+                ", turno=" + turno +
+                ", gameMode=" + gameMode +
+                '}';
     }
 }

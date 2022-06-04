@@ -1,7 +1,5 @@
 package dobblegame;
 
-import java.util.Scanner;
-import java.util.ArrayList;
 import java.util.List;
 
 public class Card {
@@ -20,10 +18,11 @@ public class Card {
         this.carta = carta;
     }
 
-    public int calculo (int numC){
-        int resultado = ((numC - 1) * (numC - 1)) + (numC - 1) + 1;
-
-        return resultado;
+    @Override
+    public String toString() {
+        return "Card{" +
+                "carta=" + carta +
+                '}';
     }
 
 }

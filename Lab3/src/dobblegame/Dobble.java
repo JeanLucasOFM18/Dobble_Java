@@ -5,6 +5,12 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Collections;
 
+/**
+ * Clase que simula una mazo Dobble, que contiene una lista de cartas(List<Card>, una lista de elementos (List<String>),
+ * la cantidad de elementos (Integer), número de elementos por carta (Integer) y el máximo de cartas a generar (Integer)
+ * @version 11.0.2
+ * @autor: Jean Lucas Rivera
+ */
 public class Dobble {
 
     private List<Card> mazo;
@@ -21,46 +27,89 @@ public class Dobble {
         this.numC = 0;
     }
 
+    /**
+     * Obtiene el mazo (List<Card>)
+     * @return List<Card> Si se obtiene el mazo
+     */
     public List<Card> getMazo() {
         return mazo;
     }
 
+    /**
+     * Modifica el mazo (List<Card>) por otro mazo
+     * @param mazo (List<Card>). Corresponde a un nuevo mazo
+     */
     public void setMazo(List<Card> mazo) {
         this.mazo = mazo;
     }
 
+    /**
+     * Obtiene los elementos para la construcción del mazo (List<String>)
+     * @return List<String> Si se obtiene la lista de elementos
+     */
     public List<String> getLis_elementos() {
         return lis_elementos;
     }
 
+    /**
+     * Modifica la lista de elementos (List<String>) por otra lista
+     * @param lis_elementos (List<String>). Corresponde a una nueva lista de elementos
+     */
     public void setLis_elementos(List<String> lis_elementos) {
         this.lis_elementos = lis_elementos;
     }
 
+    /**
+     * Obtiene la cantidad de elementos (Integer)
+     * @return Integer Si se obtiene la cantidad de elementos
+     */
     public int getCantElementos() {
         return cantElementos;
     }
 
+    /**
+     * Modifica la cantidad de elementos (Integer) por otra nueva cantidad
+     * @param cantElementos (Integer). Corresponde a una nueva cantidad de elementos
+     */
     public void setCantElementos(int cantElementos) {
         this.cantElementos = cantElementos;
     }
 
+    /**
+     * Obtiene la cantidad de elementos por carta (Integer)
+     * @return Integer Si se obtiene la cantidad de elementos por carta
+     */
     public int getNumC() {
         return numC;
     }
 
+    /**
+     * Modifica la cantidad de elementos por carta (Integer) por otra nueva cantidad de elementos por carta
+     * @param numC (Integer). Corresponde a una nueva cantidad de elementos por carta
+     */
     public void setNumC(int numC) {
         this.numC = numC;
     }
 
+    /**
+     * Obtiene la cantidad de cartas a generar (Integer)
+     * @return Integer Si se obtiene la cantidad de cartas a generar
+     */
     public int getMaxC() {
         return maxC;
     }
 
+    /**
+     * Modifica la cantidad de cartas a generar (Integer) por otra nueva cantidad de cartas a generar
+     * @param maxC (Integer). Corresponde a una nueva cantidad de cartas a generar
+     */
     public void setMaxC(int maxC) {
         this.maxC = maxC;
     }
 
+    /**
+     * Crea una lista de elementos a medida que el usuario los va ingresando (List<String>)
+     */
     public void generarLista(){
 
         System.out.println("Recuerde no ingresar elementos repetidos");
@@ -101,6 +150,9 @@ public class Dobble {
         System.out.println(getLis_elementos());
     }
 
+    /**
+     * Comprueba si se cuenta con la cantidad necesaria de cartas para iniciar el juego
+     */
     public boolean comprobarDatos(){
 
         int resultado = calculo(getNumC());
@@ -114,6 +166,9 @@ public class Dobble {
         }
     }
 
+    /**
+     * Señala la cantidad de elementos que hacen falta para crear el mazo que solicita el usuario
+     */
     public void senalarError(){
 
         int resultado = calculo(getNumC());
@@ -125,6 +180,11 @@ public class Dobble {
 
     }
 
+    /**
+     * Agrega un nuevo usuario (Usuario) a la lista de usuarios registrados del Editor
+     * @param opcion (Integer). La opción depende de si el usuario esté recién creando el mazo o bien decidió que el
+     * programa cree uno mazo completo
+     */
     public void generarMazo (int opcion){
 
         if(opcion == 1){
@@ -146,6 +206,9 @@ public class Dobble {
 
     }
 
+    /**
+     * Agrega la primera carta (Card) al mazo (List<Card>)
+     */
     public void firstCard(){
         // PRIMERA CARTA
         int i = 0;
@@ -164,6 +227,9 @@ public class Dobble {
         nextCards();
     }
 
+    /**
+     * Agrega las siguientes N cartas (Card) al mazo (List<Card>)
+     */
     public void nextCards(){
         // N CARTAS DESPUES
         int j = 1;
@@ -190,6 +256,9 @@ public class Dobble {
         lastCards();
     }
 
+    /**
+     * Agrega las siguientes N*N cartas (Card) al mazo (List<Card>)
+     */
     public void lastCards(){
         // N**2 CARTAS DESPUÉS
         int i = 0;
@@ -223,6 +292,9 @@ public class Dobble {
 
     }
 
+    /**
+     * Muestra el mazo generado
+     */
     public void mostrarMazo(){
 
         int i = 0;
@@ -234,6 +306,9 @@ public class Dobble {
 
     }
 
+    /**
+     * Determina si el set de cartas generado es válido o no para jugar
+     */
     public void dobbleGame(){
 
         int i = 0;
@@ -272,11 +347,17 @@ public class Dobble {
 
     }
 
+    /**
+     * Obtiene la cantidad de cartas que tiene el mazo generado
+     */
     public void numCards(){
 
         System.out.println("La cantidad de cartas en el set es: " + getMazo().size());
     }
 
+    /**
+     * Obtiene la carta ubicada en la posición que indica el usuario, siempre y cuando esta posición exista
+     */
     public void nthCard(){
 
         Scanner in = new Scanner(System.in);
@@ -291,6 +372,10 @@ public class Dobble {
         }
     }
 
+    /**
+     * Obtiene la cantidad necesaria de cartas que se debe tener para poder tener un set válido,
+     * todo esto a partir de una carta de muestra
+     */
     public void findTotalCards(){
 
         Scanner in = new Scanner(System.in);
@@ -308,6 +393,10 @@ public class Dobble {
         }
     }
 
+    /**
+     * Obtiene la cantidad necesaria de elementos que se debe tener para poder tener un set válido,
+     * todo esto a partir de una carta de muestra
+     */
     public void requiredElements(){
 
         Scanner in = new Scanner(System.in);
@@ -325,6 +414,9 @@ public class Dobble {
         }
     }
 
+    /**
+     * Obtiene las cartas (Card) que hacen falta para poder tener un set válido
+     */
     public void missingCards(){
 
         int maxC = calculo(getNumC());
@@ -383,6 +475,11 @@ public class Dobble {
         }
     }
 
+    /**
+     * Compara los elementos de 2 cartas y verifica si solo existe una igualdad entre ellas
+     * @param sublista (List<String>) Corresponde a la primera carta
+     * @param sublista2 (List<String>). Corresponde a la segunda carta
+     */
     public int comparaCartas(List<String> sublista, List<String> sublista2){
 
         int i = 0;
@@ -412,6 +509,10 @@ public class Dobble {
         }
     }
 
+    /**
+     * Determina cuantos elementos y cantidad de cartas se necesita para tener un set de cartas válido
+     * @param numC (Integer) Corresponde a la cantidad de elementos por carta
+     */
     public int calculo (int numC){
         int resultado = ((numC - 1) * (numC - 1)) + (numC - 1) + 1;
 
@@ -429,6 +530,10 @@ public class Dobble {
         }
     }
 
+    /**
+     * Transforma todo el contenido de un Dobble a String
+     * @return String Si se convierte todo el contenido de un Dobble a String
+     */
     @Override
     public String toString() {
         return "Dobble{" +

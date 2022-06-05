@@ -6,6 +6,12 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
+/**
+ * Clase que simula una mazo Dobble, que contiene una lista de cartas(List<Card>, una lista de elementos (List<String>),
+ * la cantidad de elementos (Integer), número de elementos por carta (Integer) y el máximo de cartas a generar (Integer)
+ * @version 11.0.2
+ * @autor: Jean Lucas Rivera
+ */
 public class DobbleGame {
 
     private Dobble mazo;
@@ -24,50 +30,98 @@ public class DobbleGame {
         this.gameMode = 0;
     }
 
+    /**
+     * Obtiene el modo de juego seleccionado por el usuario (Integer)
+     * @return Integer Si se obtiene el modo de juego seleccionado
+     */
     public int getGameMode() {
         return gameMode;
     }
 
+    /**
+     * Modifica el gameMode (Integer) por el modo de juego seleccionado por el usuario
+     * @param gameMode (Integer). Corresponde a un modo de juego seleccionado por el usuario
+     */
     public void setGameMode(int gameMode) {
         this.gameMode = gameMode;
     }
 
+    /**
+     * Obtiene el turno correspondiente al juego actual (Integer)
+     * @return Integer Si se obtiene el turno
+     */
     public int getTurno() {
         return turno;
     }
 
+    /**
+     * Modifica el turno (Integer) por uno actualizado
+     * @param turno (Integer). Corresponde al turno actualizado
+     */
     public void setTurno(int turno) {
         this.turno = turno;
     }
 
+    /**
+     * Obtiene el mazo del juego y sus datos correspondientes (Dobble)
+     * @return Dobble Si se obtiene el mazo y sus datos
+     */
     public Dobble getMazo() {
         return mazo;
     }
 
+    /**
+     * Modifica el mazo del juego y sus datos (Dobble) por uno actualizado
+     * @param mazo (Dobble). Corresponde a un mazo actualizado según el transcurso del juego
+     */
     public void setMazo(Dobble mazo) {
         this.mazo = mazo;
     }
 
+    /**
+     * Obtiene el estado del juego
+     * @return String Si se obtiene el estado del juego
+     */
     public String getEstado() {
         return estado;
     }
 
+    /**
+     * Modifica el estado (String) por uno estado actualizado según la fase del juego
+     * @param estado (String). Corresponde a un estado actualizado
+     */
     public void setEstado(String estado) {
         this.estado = estado;
     }
 
+    /**
+     * Obtiene los jugadores (List<Player>)
+     * @return List<Player> Si se obtiene los jugadores
+     */
     public List<Player> getJugadores() {
         return jugadores;
     }
 
+    /**
+     * Modifica la lista de los jugadores (List<Player>) por una con datos actualizados
+     * @param jugadores (List<Player>). Corresponde a una lista actualizada de jugadores
+     */
     public void setJugadores(List<Player> jugadores) {
         this.jugadores = jugadores;
     }
 
+    /**
+     * Obtiene la cantidad de jugadores que serán parte del juego
+     * @return Integer Si se obtiene la cantidad de jugadores
+     */
     public int getNumP() {
         return numP;
     }
 
+    /**
+     * Modifica la cantidad de jugadores (Integer) por una actualizada
+     * @param numP (Integer). Corresponde a una cantidad de jugadores nueva
+     */
     public void setNumP(int numP) {
         this.numP = numP;
     }
@@ -520,6 +574,10 @@ public class DobbleGame {
         }
     }
 
+    /**
+     * Transforma todo el contenido de un DobbleGame a String
+     * @return String Si se convierte todo el contenido de un DobbleGame a String
+     */
     @Override
     public String toString() {
         return "DobbleGame{" +

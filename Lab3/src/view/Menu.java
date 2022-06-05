@@ -36,7 +36,7 @@ public class Menu {
 
     /**
      * Obtiene el datosJuego
-     * @return datosMazo Si se obtiene el datosJuego
+     * @return datosJuego Si se obtiene el datosJuego
      */
     public DobbleGame getDatosJuego() {
         return datosJuego;
@@ -51,7 +51,7 @@ public class Menu {
     }
 
     /**
-     * Permite ejecutar las distintas funcionalidades del menu
+     * Permite ejecutar las distintas funcionalidades del menu principal
      */
     public void ejecutarMenu() {
 
@@ -137,18 +137,24 @@ public class Menu {
                             getDatosMazo().getLis_elementos().removeAll(getDatosMazo().getLis_elementos());
                         }
                         break;
-                case 2: getDatosJuego().registrarJugador();
+                case 2: // REGISTER
+                        getDatosJuego().registrarJugador();
                         break;
-                case 3: datosJuego();
+                case 3: // ACCEDER AL SUBMENU DONDE ESTÁN LOS DATOS DEL JUEGO
+                        datosJuego();
                         break;
-                case 4: if(getDatosMazo().getNumC() == 0) {
+                case 4: // Se debe crear el juego para comenzar a jugar
+                        if(getDatosMazo().getNumC() == 0) {
                             System.out.println("Debe crear el juego para acceder a esta funcion");
                         }
                         else {
+                            // Se obtiene la cantidad de cartas necesarias para empezar el juego
                             habilitador = getDatosMazo().calculo(getDatosMazo().getNumC());
+                            // En caso de tener un set válido se accede a jugar
                             if (getDatosJuego().comprobarDatos() == 0) {
                                 jugar();
                             }
+                            // El mazo no es válido para iniciar el juego y se le da la opción al usuario de crear un set completo
                             if (getDatosJuego().comprobarDatos() == 1) {
                                 System.out.println("No posee la cantidad necesaria de cartas para jugar");
                                 System.out.println("Desea generar el maximo numero de cartas para poder jugar?");
@@ -162,19 +168,25 @@ public class Menu {
                                     System.out.println("Mazo generado con exito");
                                 }
                             }
+                            // Faltan jugadores por registrar
                             else {
                                 System.out.println("No ha registrado a la totalidad de jugadores para jugar");
                             }
                         }
                         break;
-                case 5: i = 1;
+                case 5: // SALIR
+                        i = 1;
                         break;
             }
         }
     }
 
+    /**
+     * Permite ejecutar las distintas funcionalidades del submenu dedicado a dar los datos del juego
+     */
     public void datosJuego() {
 
+        // En caso de no crear el juego no se puede acceder a esta seccion
         if (getDatosMazo().getNumC() == 0) {
             System.out.println("Debe crear el juego para acceder a esta funcion");
         }
@@ -190,11 +202,14 @@ public class Menu {
                 System.out.println("3. Volver atras");
                 int opcion = in.nextInt();
                 switch (opcion) {
-                    case 1: opcionMazo();
+                    case 1: // ACCEDER AL SUBMENU DEDICADO A LOS DATOS DEL MAZO
+                            opcionMazo();
                             break;
-                    case 2: opcionJuego();
+                    case 2: // ACCEDER AL SUBMENU DEDICADO A LOS DATOS DE LOS JUGADORES
+                            opcionJugadores();
                             break;
-                    case 3: i = 1;
+                    case 3: // VOLVER AL MENU PRINCIPAL
+                            i = 1;
                             break;
                 }
             }
@@ -202,6 +217,9 @@ public class Menu {
 
     }
 
+    /**
+     * Permite ejecutar las distintas funcionalidades del submenu dedicado a jugar
+     */
     public void jugar() {
 
         Scanner in = new Scanner(System.in);
@@ -220,34 +238,51 @@ public class Menu {
             System.out.println("8. Volver atras");
             int opcion = in.nextInt();
             switch (opcion) {
-                case 1: getDatosJuego().status();
-                    break;
-                case 2: getDatosJuego().whoseTurnIsIt();
-                    break;
-                case 3: getDatosJuego().score();
-                    break;
-                case 4: getDatosJuego().passTurn();
+                case 1: // STATUS
+                        // Se obtiene el estado del juego, puede ser "No iniciado", "En juego" y "Finalizado"
+                        getDatosJuego().status();
+                        break;
+                case 2: // WHOSETURNISIT
+                        // Se obtiene el nombre del jugador al que le pertenece el turno actual
+                        getDatosJuego().whoseTurnIsIt();
+                        break;
+                case 3: // SCORE
+                        // Obtiene el puntaje de un jugador
+                        getDatosJuego().score();
+                        break;
+                case 4: // PASAR TURNO
+                        getDatosJuego().passTurn();
                         getDatosJuego().devolverAlMazo();
                         break;
-                case 5: if(getDatosMazo().getMazo().size() < 2){
+                case 5: // PLAY
+                        // Se comprueban si quedan como mínimo 2 cartas en el mazo para jugar
+                        if(getDatosMazo().getMazo().size() < 2){
+                            // Se le solicita terminar el juego al usuario
                             System.out.println("Ya no se puede seguir jugando, favor terminar el juego");
                         }
                         else{
                             getDatosJuego().play();
+                            // Se cambia el estado del juego
                             getDatosJuego().setEstado("En juego");
                         }
                         break;
                 case 6: //getDatosJuego().gameToString();
                         break;
-                case 7: getDatosJuego().endGame();
+                case 7: // FINALIZAR JUEGO
+                        getDatosJuego().endGame();
+                        // Se cambia el estado del juego
                         getDatosJuego().setEstado("Finalizado");
                         break;
-                case 8: i = 1;
+                case 8: // VOLVER ATRÁS
+                        i = 1;
                         break;
             }
         }
     }
 
+    /**
+     * Permite ejecutar las distintas funcionalidades del submenu dedicado a dar los datos del mazo
+     */
     public void opcionMazo(){
 
         Scanner in = new Scanner(System.in);
@@ -266,29 +301,48 @@ public class Menu {
             System.out.println("9. Volver atras");
             int opcion = in.nextInt();
             switch (opcion) {
-                case 1: getDatosMazo().mostrarMazo();
-                    break;
-                case 2: getDatosMazo().dobbleGame();
-                    break;
-                case 3: getDatosMazo().numCards();
-                    break;
-                case 4: getDatosMazo().nthCard();
-                    break;
-                case 5: getDatosMazo().findTotalCards();
+                case 1: // MOSTRAR MAZO
+                        getDatosMazo().mostrarMazo();
                         break;
-                case 6: getDatosMazo().requiredElements();
+                case 2: // DOBBLE?
+                        // Se verifica la validez del mazo
+                        getDatosMazo().dobbleGame();
                         break;
-                case 7: getDatosMazo().missingCards();
-                    break;
-                case 8: getDatosMazo().cardsSetToString();
-                    break;
-                case 9: i = 1;
-                    break;
+                case 3: // NUMCARDS
+                        // Se obtiene la cantidad de cartas que tiene el mazo creado
+                        getDatosMazo().numCards();
+                        break;
+                case 4: // NTHCARD
+                        // Se obtiene la carta ubicada en la posicion dada por el usuario (inicia en la pos 0)
+                        getDatosMazo().nthCard();
+                        break;
+                case 5: // FINDTOTALCARDS
+                        // Se obtiene la cantidad total de cartas que se necesitan a partir de una carta muestra
+                        getDatosMazo().findTotalCards();
+                        break;
+                case 6: // REQUIREDELEMENTS
+                        // Se obtiene la cantidad total de elementos que se necesitan a partir de una carta muestra
+                        getDatosMazo().requiredElements();
+                        break;
+                case 7: // MISSINGCARDS
+                        // Se obtiene las cartas faltantes para que el mazo sea válido
+                        getDatosMazo().missingCards();
+                        break;
+                case 8: // CARDSSETTOSTRING
+                        // Se obtiene una representación en base de strings del mazo
+                        getDatosMazo().cardsSetToString();
+                        break;
+                case 9: // SE VUELVE ATRAS
+                        i = 1;
+                        break;
             }
         }
     }
 
-    public void opcionJuego(){
+    /**
+     * Permite ejecutar las distintas funcionalidades del submenu dedicado a dar los datos de los jugadores
+     */
+    public void opcionJugadores(){
 
         Scanner in = new Scanner(System.in);
         int i = 0;
@@ -301,13 +355,17 @@ public class Menu {
             System.out.println("4. Volver atras");
             int opcion = in.nextInt();
             switch (opcion) {
-                case 1: getDatosJuego().listaJugadores();
+                case 1: // MUESTRA LISTA DE JUGADORES
+                        getDatosJuego().listaJugadores();
                         break;
-                case 2: getDatosJuego().listaPuntajes();
+                case 2: // MUESTRA LISTA DE PUNTAJES
+                        getDatosJuego().listaPuntajes();
                         break;
-                case 3: getDatosJuego().turnos();
+                case 3: // MUESTRA ORDEN DE LOS TURNOS
+                        getDatosJuego().turnos();
                         break;
-                case 4: i = 1;
+                case 4: // VOLVER ATRAS
+                        i = 1;
                         break;
             }
         }

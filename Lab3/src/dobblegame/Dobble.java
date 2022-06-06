@@ -152,6 +152,7 @@ public class Dobble {
 
     /**
      * Comprueba si se cuenta con la cantidad necesaria de cartas para iniciar el juego
+     * @return Boolean Dependiendo si se tiene la cantidad de cartas necesarias o no
      */
     public boolean comprobarDatos(){
 
@@ -479,6 +480,7 @@ public class Dobble {
      * Compara los elementos de 2 cartas y verifica si solo existe una igualdad entre ellas
      * @param sublista (List<String>) Corresponde a la primera carta
      * @param sublista2 (List<String>). Corresponde a la segunda carta
+     * @return Integer Dependiendo del caso que se cumpla
      */
     public int comparaCartas(List<String> sublista, List<String> sublista2){
 
@@ -492,7 +494,7 @@ public class Dobble {
             elemento = sublista.get(i);
             while(j < largo){
                 elemento2 = sublista2.get(j);
-                if(equals(elemento, elemento2) == true){
+                if(elemento.equals(elemento2)){
                     comparacion = comparacion + 1;
                 }
                 j = j + 1;
@@ -512,22 +514,12 @@ public class Dobble {
     /**
      * Determina cuantos elementos y cantidad de cartas se necesita para tener un set de cartas válido
      * @param numC (Integer) Corresponde a la cantidad de elementos por carta
+     * @return Integer Si se obtiene la cantidad total de elementos y cantidad de cartas necesarias
      */
     public int calculo (int numC){
         int resultado = ((numC - 1) * (numC - 1)) + (numC - 1) + 1;
 
         return resultado;
-    }
-
-    public boolean equals(String objeto1, String objeto2){
-
-        if(objeto1.compareTo(objeto2) == 0){
-            return true;
-        }
-
-        else{
-            return false;
-        }
     }
 
     /**
@@ -544,4 +536,13 @@ public class Dobble {
                 ", maxC=" + maxC +
                 '}';
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Dobble dobble = (Dobble) o;
+        return getCantElementos() == dobble.getCantElementos() && getNumC() == dobble.getNumC() && getMaxC() == dobble.getMaxC() && getMazo().equals(dobble.getMazo()) && getLis_elementos().equals(dobble.getLis_elementos());
+    }
+
 }

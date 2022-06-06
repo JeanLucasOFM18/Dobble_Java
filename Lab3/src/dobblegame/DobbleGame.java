@@ -126,6 +126,9 @@ public class DobbleGame {
         this.numP = numP;
     }
 
+    /**
+     * Registra un nuevo jugador y lo agrega a la lista de jugadores existente
+     */
     public void registrarJugador(){
 
         Scanner in = new Scanner(System.in);
@@ -165,7 +168,7 @@ public class DobbleGame {
                 int j = 0;
                 while(i < largo){
                     String nombre2 = getJugadores().get(i).getNombre();
-                    if(equals(nombre, nombre2) == true){
+                    if(nombre.equals(nombre2)){
                         System.out.println("Ya existe un jugador con ese nombre");
                         i = largo;
                         j = 1;
@@ -185,6 +188,9 @@ public class DobbleGame {
         }
     }
 
+    /**
+     * Comprueba si se puede iniciar el juego con la cantidad de jugadores registrados y el mazo
+     */
     public int comprobarDatos(){
 
         int largo = getJugadores().size();
@@ -204,6 +210,9 @@ public class DobbleGame {
         }
     }
 
+    /**
+     * Se muestra la lista de jugadores registrados
+     */
     public void listaJugadores(){
 
         int i = 0;
@@ -219,6 +228,9 @@ public class DobbleGame {
 
     }
 
+    /**
+     * Se muestra la lista de puntajes de los jugadores
+     */
     public void listaPuntajes(){
 
         int i = 0;
@@ -234,6 +246,9 @@ public class DobbleGame {
 
     }
 
+    /**
+     * Muestra el orden de los turnos del juego
+     */
     public void turnos(){
 
         int largo = getJugadores().size();
@@ -247,11 +262,17 @@ public class DobbleGame {
 
     }
 
+    /**
+     * Muestra cual es el estado actual del juego
+     */
     public void status(){
 
         System.out.println("El estado del juego es: " + getEstado());
     }
 
+    /**
+     * Muestra el puntaje de un jugador en específico
+     */
     public void score(){
 
         int i = 0;
@@ -266,6 +287,9 @@ public class DobbleGame {
 
     }
 
+    /**
+     * Muestra a quien le corresponde el turno actual de jugar
+     */
     public void whoseTurnIsIt() {
 
         int i = 0;
@@ -281,6 +305,9 @@ public class DobbleGame {
         }
     }
 
+    /**
+     * Obtiene las 2 cartas que se encuentran en la cima de la pila de cartas y las muestra al usuario
+     */
     public void voltearCartas(){
 
         int i = getMazo().getMazo().size() - 1;
@@ -290,6 +317,9 @@ public class DobbleGame {
 
     }
 
+    /**
+     * Permite saltar el turno actual y pasar al siguiente
+     */
     public void passTurn(){
 
         int turnoNuevo;
@@ -307,6 +337,10 @@ public class DobbleGame {
 
     }
 
+    /**
+     * Permite determinar si la igualdad indicada por el usuario es o no acertada
+     * @return Integer Según se de alguna de las 3 opciones (Correcta, Incorrecta o Turno erróneo)
+     */
     public int senalarIgualdad(){
 
         Scanner in = new Scanner(System.in);
@@ -315,7 +349,7 @@ public class DobbleGame {
         String nombreTurno = getJugadores().get(getTurno()).getNombre();
         int comparacion;
 
-        if(equals(nombre, nombreTurno) == true){
+        if(nombre.equals(nombreTurno)){
             System.out.println("Ingrese la coincidencia encontrada: ");
             String coincidencia = in.nextLine();
             comparacion = validarcoincidencia(coincidencia);
@@ -334,6 +368,11 @@ public class DobbleGame {
         }
     }
 
+    /**
+     * Comprueba si el elemento
+     * @param coincidencia (String). Corresponde a la igualdad encontrada por el usuario
+     * @return Integer Dependiendo de si la coincidencia es correcta o no
+     */
     public int validarcoincidencia(String coincidencia){
 
         int k = getMazo().getMazo().size() - 1;
@@ -349,7 +388,7 @@ public class DobbleGame {
             elemento = getMazo().getMazo().get(k).getCarta().get(i);
             while(j < getMazo().getNumC()){
                 elemento2 = getMazo().getMazo().get(m).getCarta().get(j);
-                if(equals(elemento, elemento2) == true){
+                if(elemento.equals(elemento2)){
                     coincidenciaCorrecta = elemento2;
                     j = j + 1;
                 }
@@ -361,7 +400,7 @@ public class DobbleGame {
             i = i + 1;
         }
 
-        if(equals(coincidencia, coincidenciaCorrecta) == true){
+        if(coincidencia.equals(coincidenciaCorrecta)){
             return 0;
         }
         else{
@@ -369,6 +408,9 @@ public class DobbleGame {
         }
     }
 
+    /**
+     * Permite sumar puntaje a un jugador en caso de que su coincidencia sea correcta
+     */
     public void sumaPuntaje(){
 
         int i = 0;
@@ -388,6 +430,9 @@ public class DobbleGame {
 
     }
 
+    /**
+     * Permite eliminar un par de cartas en caso de que el jugador haya indicado una coincidencia correcta
+     */
     public void eliminarCartas(){
 
         int i = getMazo().getMazo().size() - 1;
@@ -401,6 +446,9 @@ public class DobbleGame {
 
     }
 
+    /**
+     * Permite devolver al inicio de un mazo un par de cartas en caso de que el jugador haya indicado una coincidencia incorrecta
+     */
     public void devolverAlMazo(){
 
         int i = getMazo().getMazo().size() - 1;
@@ -446,6 +494,9 @@ public class DobbleGame {
 
     }*/
 
+    /**
+     * Finaliza el juego y muestra al jugador/es el resultado final
+     */
     public void endGame(){
 
         List<Integer> puntajes = new ArrayList<>();
@@ -499,6 +550,9 @@ public class DobbleGame {
         }
     }
 
+    /**
+     * Permite realizar la acción de jugar
+     */
     public void play(){
 
         int i = 0;
@@ -539,6 +593,11 @@ public class DobbleGame {
 
         }
     }
+
+    /**
+     * Permite ejecutar un juego vs la CPU
+     * @return Integer Depende de si la coincidencia es correcta o no
+     */
     public int vsCPUMode(){
 
         if(getTurno() == 0){
@@ -563,17 +622,6 @@ public class DobbleGame {
 
     }
 
-    public boolean equals(String objeto1, String objeto2){
-
-        if(objeto1.compareTo(objeto2) == 0){
-            return true;
-        }
-
-        else{
-            return false;
-        }
-    }
-
     /**
      * Transforma todo el contenido de un DobbleGame a String
      * @return String Si se convierte todo el contenido de un DobbleGame a String
@@ -589,4 +637,13 @@ public class DobbleGame {
                 ", gameMode=" + gameMode +
                 '}';
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        DobbleGame that = (DobbleGame) o;
+        return getNumP() == that.getNumP() && getTurno() == that.getTurno() && getGameMode() == that.getGameMode() && getMazo().equals(that.getMazo()) && getJugadores().equals(that.getJugadores()) && getEstado().equals(that.getEstado());
+    }
+
 }

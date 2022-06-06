@@ -58,4 +58,12 @@ public class Player {
                 ", puntaje=" + puntaje +
                 '}';
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Player player = (Player) o;
+        return getNombre().equals(player.getNombre()) && getPuntaje().equals(player.getPuntaje());
+    }
 }

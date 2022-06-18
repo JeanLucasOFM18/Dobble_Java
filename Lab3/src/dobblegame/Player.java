@@ -1,11 +1,13 @@
 package dobblegame;
 
+import java.util.Objects;
+
 /**
  * Clase que simula un Player, que contiene un nombre (String) y su puntaje (Integer)
  * @version 11.0.2
  * @autor: Jean Lucas Rivera
  */
-public class Player {
+public class Player implements IPlayer {
 
     private String nombre;
     private Integer puntaje;
@@ -24,7 +26,7 @@ public class Player {
     }
 
     /**
-     * Modifica el nombre (String) unico de un Player
+     * Modifica el nombre (String) único de un Player
      * @param nombre (String). Corresponde al nombre único de un Player
      */
     public void setNombre(String nombre) {
@@ -40,7 +42,7 @@ public class Player {
     }
 
     /**
-     * Modifica el puntaje (Integer) unico de un Player
+     * Modifica el puntaje (Integer) único de un Player
      * @param puntaje (Integer). Corresponde al puntaje único de un Player
      */
     public void setPuntaje(Integer puntaje) {
@@ -64,6 +66,6 @@ public class Player {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Player player = (Player) o;
-        return getNombre().equals(player.getNombre()) && getPuntaje().equals(player.getPuntaje());
+        return Objects.equals(getNombre(), player.getNombre()) && Objects.equals(getPuntaje(), player.getPuntaje());
     }
 }

@@ -11,7 +11,7 @@ import java.util.Collections;
  * @version 11.0.2
  * @autor: Jean Lucas Rivera
  */
-public class Dobble {
+public class Dobble implements IDobble {
 
     private List<Card> mazo;
     private List<String> lis_elementos;
@@ -20,7 +20,7 @@ public class Dobble {
     private int maxC;
 
     public Dobble() {
-        this.mazo = new ArrayList <Card>();
+        this.mazo = new ArrayList <>();
         this.lis_elementos = new ArrayList<>();
         this.cantElementos = 0;
         this.maxC = 0;
@@ -120,11 +120,11 @@ public class Dobble {
         int j = 0;
         int aux = 0;
         while(i < getCantElementos()){
-            System.out.println("Ingrese el elemento: ");
+            System.out.println("Ingrese el " + (i + 1) + " elemento: ");
             String elemento = in.nextLine();
             int largo = getLis_elementos().size();
             while(j < largo){
-                String elemento2 = getLis_elementos().get(j);;
+                String elemento2 = getLis_elementos().get(j);
                 if(elemento.equals(elemento2)){
                     aux = 1;
                     j = largo;
@@ -147,7 +147,7 @@ public class Dobble {
         }
 
         Collections.shuffle(getLis_elementos());
-        System.out.println(getLis_elementos());
+        System.out.println("Su lista de elementos aleatorizada es: " + getLis_elementos());
     }
 
     /**
@@ -159,12 +159,11 @@ public class Dobble {
         int resultado = calculo(getNumC());
         int largo = getLis_elementos().size();
 
-        if(resultado <= largo){
-            return true;
-        }
-        else{
+        if(resultado > largo || resultado < getMaxC()){
             return false;
         }
+
+        return true;
     }
 
     /**
@@ -177,7 +176,12 @@ public class Dobble {
 
         int faltantes = resultado - largo;
 
-        System.out.println("Para crear el set de cartas correcto se necesita agregar " + faltantes + " elementos");
+        if(resultado > largo){
+            System.out.println("Para crear el set de cartas correcto se necesita agregar " + faltantes + " elementos");
+        }
+        else{
+            System.out.println("No se puede generar esta cantidad de cartas");
+        }
 
     }
 
@@ -203,7 +207,12 @@ public class Dobble {
             firstCard();
         }
 
-        Collections.shuffle(getMazo());
+        int i = 0;
+        int largo = getMazo().size();
+        while(i < largo){
+            Collections.shuffle(getMazo().get(i).getCarta());
+            i = i + 1;
+        }
 
     }
 
@@ -211,7 +220,6 @@ public class Dobble {
      * Agrega la primera carta (Card) al mazo (List<Card>)
      */
     public void firstCard(){
-        // PRIMERA CARTA
         int i = 0;
         String elemento;
         List<String> elementos = new ArrayList<>();
@@ -232,9 +240,8 @@ public class Dobble {
      * Agrega las siguientes N cartas (Card) al mazo (List<Card>)
      */
     public void nextCards(){
-        // N CARTAS DESPUES
         int j = 1;
-        int k = 0;
+        int k;
         int aux;
         String elemento;
         while(j < getNumC()){
@@ -261,10 +268,9 @@ public class Dobble {
      * Agrega las siguientes N*N cartas (Card) al mazo (List<Card>)
      */
     public void lastCards(){
-        // N**2 CARTAS DESPUÉS
         int i = 0;
-        int j = 0;
-        int k = 0;
+        int j;
+        int k;
         int aux2 = getNumC() - 1;
         String elemento;
         int aux;
@@ -366,7 +372,7 @@ public class Dobble {
         int posicion = in.nextInt();
 
         if(posicion > getMaxC() - 1){
-            System.out.println("No existe la carta " + posicion + " en  su mazo");
+            System.out.println("No existe la carta " + posicion + " en su mazo");
         }
         else{
             System.out.println("La carta escogida es: " + getMazo().get(posicion).getCarta());
@@ -411,7 +417,7 @@ public class Dobble {
             List<String> sublista = getMazo().get(posicion).getCarta();
             int largo = sublista.size();
             int total = calculo(largo);
-            System.out.println("La cantidad de elementos necesarios son: " + total);;
+            System.out.println("La cantidad de elementos necesarios son: " + total);
         }
     }
 
@@ -422,9 +428,10 @@ public class Dobble {
 
         int maxC = calculo(getNumC());
         if(getMazo().size() == maxC){
-            System.out.println("[]");
+            System.out.println("El set de cartas esta completo");
         }
         else{
+            System.out.println("Las cartas faltantes son:");
             List<Card> setUsuario = getMazo();
             Dobble mazoEntero = new Dobble();
             mazoEntero.setMaxC(maxC);
@@ -452,17 +459,16 @@ public class Dobble {
                 }
                 if(comparacion == 0){
                     System.out.println(mazoEntero.getMazo().get(i).getCarta());
-                    j = 0;
-                    i = i + 1;
                 }
-                else{
-                    j = 0;
-                    i = i + 1;
-                }
+                j = 0;
+                i = i + 1;
             }
         }
     }
 
+    /**
+     * Obtiene una representación en base string del set de cartas
+     */
     public void cardsSetToString(){
 
         int i = 0;
@@ -517,9 +523,8 @@ public class Dobble {
      * @return Integer Si se obtiene la cantidad total de elementos y cantidad de cartas necesarias
      */
     public int calculo (int numC){
-        int resultado = ((numC - 1) * (numC - 1)) + (numC - 1) + 1;
 
-        return resultado;
+        return ((numC - 1) * (numC - 1)) + (numC - 1) + 1;
     }
 
     /**
@@ -528,12 +533,13 @@ public class Dobble {
      */
     @Override
     public String toString() {
-        return "Dobble{" +
+
+        return "Dobble{\n" +
                 "mazo=" + mazo +
-                ", lis_elementos=" + lis_elementos +
-                ", cantElementos=" + cantElementos +
-                ", numC=" + numC +
-                ", maxC=" + maxC +
+                "\nlis_elementos=" + lis_elementos +
+                "\ncantElementos=" + cantElementos +
+                "\nnumC=" + numC +
+                "\nmaxC=" + maxC +
                 '}';
     }
 

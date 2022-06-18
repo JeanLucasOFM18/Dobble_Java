@@ -1,13 +1,14 @@
 package dobblegame;
 
 import java.util.List;
+import java.util.Objects;
 
 /**
  * Clase que simula una Card, que contiene una lista de elementos
  * @version 11.0.2
  * @autor: Jean Lucas Rivera
  */
-public class Card {
+public class Card implements ICard {
 
     private List<String> carta;
 
@@ -47,6 +48,7 @@ public class Card {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Card card = (Card) o;
-        return getCarta().equals(card.getCarta());
+        return Objects.equals(getCarta(), card.getCarta());
     }
+
 }
